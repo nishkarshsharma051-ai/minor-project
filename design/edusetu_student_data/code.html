@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#353c48",
+              "secondary-fixed-dim": "#a4abbb",
+              "primary": "#000000",
+              "surface-tint": "#5e5e5e",
+              "surface-container-low": "#f3f3f4",
+              "on-primary": "#e2e2e2",
+              "on-error-container": "#410002",
+              "surface-dim": "#dadada",
+              "on-secondary-container": "#151c27",
+              "secondary": "#585f6c",
+              "inverse-on-surface": "#f0f1f1",
+              "tertiary-fixed-dim": "#404758",
+              "outline-variant": "#c6c6c6",
+              "primary-fixed-dim": "#474747",
+              "tertiary-container": "#6e7487",
+              "on-surface-variant": "#474747",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "on-surface": "#1a1c1c",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#ffffff",
+              "tertiary-fixed": "#575e70",
+              "tertiary": "#343b4c",
+              "surface": "#f9f9f9",
+              "outline": "#777777",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "surface-variant": "#e2e2e2",
+              "secondary-fixed": "#c0c7d6",
+              "primary-container": "#3b3b3b",
+              "inverse-primary": "#c6c6c6",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#151c27",
+              "on-primary-container": "#ffffff",
+              "on-tertiary": "#dce2f7",
+              "inverse-surface": "#2f3131",
+              "surface-container": "#eeeeee",
+              "secondary-container": "#ced4e4",
+              "on-error": "#ffffff",
+              "surface-container-high": "#e8e8e8",
+              "on-tertiary-fixed": "#ffffff",
+              "on-tertiary-fixed-variant": "#dce2f7",
+              "primary-fixed": "#5e5e5e",
+              "on-background": "#1a1c1c",
+              "surface-container-highest": "#e2e2e2",
+              "background": "#f9f9f9",
+              "on-tertiary-container": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col bg-black dark:bg-neutral-950 py-6 z-40">
+<div class="px-6 mb-10">
+<span class="text-white font-bold text-xl tracking-tighter">EduSetu</span>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center px-6 py-3 text-neutral-400 hover:text-white mx-2 my-1 hover:bg-neutral-800 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="grid_view">grid_view</span>
+<span class="text-sm font-regular">Dashboard</span>
+</a>
+<a class="flex items-center px-6 py-3 bg-neutral-800 text-white rounded-lg mx-2 my-1 group scale-[0.98]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="group">group</span>
+<span class="text-sm font-regular">Student Data</span>
+</a>
+<a class="flex items-center px-6 py-3 text-neutral-400 hover:text-white mx-2 my-1 hover:bg-neutral-800 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="online_prediction">online_prediction</span>
+<span class="text-sm font-regular">Prediction</span>
+</a>
+<a class="flex items-center px-6 py-3 text-neutral-400 hover:text-white mx-2 my-1 hover:bg-neutral-800 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="analytics">analytics</span>
+<span class="text-sm font-regular">Analytics</span>
+</a>
+<a class="flex items-center px-6 py-3 text-neutral-400 hover:text-white mx-2 my-1 hover:bg-neutral-800 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="description">description</span>
+<span class="text-sm font-regular">Reports</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer">
+<div class="w-8 h-8 rounded-full bg-neutral-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm" data-icon="person">person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-white tracking-widest uppercase">Admin</span>
+<span class="text-[10px] text-neutral-500 uppercase tracking-widest">Logout</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-sm dark:shadow-none flex justify-between items-center px-8">
+<div class="flex items-center space-x-4">
+<h1 class="text-xl font-semibold text-neutral-900 dark:text-neutral-50 Inter">Student Directory</h1>
+</div>
+<div class="flex items-center space-x-6">
+<div class="relative flex items-center">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-neutral-400 text-sm" data-icon="search">search</span>
+</div>
+<input class="block w-64 pl-10 pr-3 py-1.5 border-none bg-surface-container-high rounded-full text-sm focus:ring-1 focus:ring-primary/10 placeholder-neutral-500 transition-all" placeholder="Search students..." type="text"/>
+</div>
+<div class="flex items-center space-x-2">
+<button class="p-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-neutral-200 overflow-hidden ml-2">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="Headshot of a university administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpyTfWZacMRPOOxgV9zVZ2bI_rE2w25jVzskQEG5mo1YmRRwBz6RB7eVX1e1GN2-xGm18aV4__gJbxKeXJLM2HLss-_Pv08-n3Sl8UudqSfd74O50CM6l2x10VCMQ50Dz2ZjwT1s78xly9AnL8SQIYvyfKSJDyb0VfNB2_AO5cOka20I2CH-EAAWI_1IN6j21NlbUSSc8oloILJpqof51NZ1hWWkQuxIbnqztEu-tCDAd-SDEHwbiAZd7q6w_4QNaguwz7EG8VrPK_"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 min-h-screen">
+<div class="p-10 max-w-7xl mx-auto">
+<!-- Page Header Section -->
+<div class="mb-12 flex justify-between items-end">
+<div>
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant mb-2 block">Institutional Management</span>
+<h2 class="text-5xl font-semibold tracking-tight text-primary">Student Data</h2>
+</div>
+<div class="flex items-center space-x-3">
+<button class="flex items-center px-4 py-2 bg-white border border-outline-variant border-opacity-15 rounded-lg text-sm font-medium hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg mr-2" data-icon="filter_list">filter_list</span>
+                        Filter
+                    </button>
+<button class="flex items-center px-6 py-2 bg-primary text-on-primary rounded-lg text-sm font-medium hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined text-lg mr-2" data-icon="add">add</span>
+                        Enroll Student
+                    </button>
+</div>
+</div>
+<!-- Asymmetric Data Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Summary Metrics (The Data Monoliths) -->
+<div class="col-span-12 lg:col-span-3">
+<div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between h-48">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Total Students</span>
+<div class="mt-4">
+<span class="text-6xl font-semibold tracking-tighter">1,284</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-3">
+<div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between h-48">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Avg Attendance</span>
+<div class="mt-4">
+<span class="text-6xl font-semibold tracking-tighter">92%</span>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-6">
+<div class="bg-surface-container-lowest p-8 rounded-xl flex items-center h-48 overflow-hidden relative">
+<div class="z-10">
+<span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest block mb-2">Performance Trend</span>
+<span class="text-3xl font-semibold">+4.2%</span>
+<p class="text-xs text-on-surface-variant mt-1">Growth in median internal scores</p>
+</div>
+<div class="absolute right-0 bottom-0 top-0 w-1/2 opacity-20 flex items-end">
+<!-- Placeholder for abstract sparkline/pattern -->
+<div class="w-full h-full bg-gradient-to-t from-primary to-transparent" style="clip-path: polygon(0 100%, 10% 80%, 20% 90%, 30% 60%, 40% 70%, 50% 40%, 60% 50%, 70% 20%, 80% 30%, 90% 10%, 100% 40%, 100% 100%);"></div>
+</div>
+</div>
+</div>
+<!-- Main Table Section -->
+<div class="col-span-12">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Name</th>
+<th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Attendance (%)</th>
+<th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Internal Marks</th>
+<th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Study Hours</th>
+<th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mr-4 text-primary font-bold">AS</div>
+<span class="text-sm font-medium text-primary">Arjun Sharma</span>
+</div>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm font-semibold">85%</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">42</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">6.5</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="more_horiz">more_horiz</button>
+</td>
+</tr>
+<!-- Low Attendance Subtle Highlight -->
+<tr class="bg-surface-container-low/40 hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mr-4 text-primary font-bold">RP</div>
+<span class="text-sm font-medium text-primary">Riya Patel</span>
+</div>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm font-bold text-error">72%</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">35</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">4.0</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="more_horiz">more_horiz</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mr-4 text-primary font-bold">AK</div>
+<span class="text-sm font-medium text-primary">Aarav Kumar</span>
+</div>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm font-semibold">94%</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">48</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">8.2</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="more_horiz">more_horiz</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mr-4 text-primary font-bold">IS</div>
+<span class="text-sm font-medium text-primary">Isha Singh</span>
+</div>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm font-semibold">88%</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">39</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">5.5</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="more_horiz">more_horiz</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-highest/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center mr-4 text-primary font-bold">VD</div>
+<span class="text-sm font-medium text-primary">Vikram Das</span>
+</div>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm font-semibold">91%</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">45</span>
+</td>
+<td class="px-8 py-6 text-center">
+<span class="text-sm">7.0</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors" data-icon="more_horiz">more_horiz</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Minimalist Pagination -->
+<div class="px-8 py-6 bg-white border-t border-surface-container-low flex justify-between items-center">
+<span class="text-xs text-on-surface-variant font-medium">Showing 5 of 1,284 students</span>
+<div class="flex space-x-2">
+<button class="p-2 border border-outline-variant border-opacity-15 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 border border-outline-variant border-opacity-15 rounded-lg bg-primary text-on-primary">
+<span class="text-xs px-2">1</span>
+</button>
+<button class="p-2 border border-outline-variant border-opacity-15 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="text-xs px-2">2</span>
+</button>
+<button class="p-2 border border-outline-variant border-opacity-15 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="text-xs px-2">3</span>
+</button>
+<button class="p-2 border border-outline-variant border-opacity-15 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

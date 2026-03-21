@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduSetu – Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9; /* Design System surface */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#353c48",
+              "secondary-fixed-dim": "#a4abbb",
+              "primary": "#000000",
+              "surface-tint": "#5e5e5e",
+              "surface-container-low": "#f3f3f4",
+              "on-primary": "#e2e2e2",
+              "on-error-container": "#410002",
+              "surface-dim": "#dadada",
+              "on-secondary-container": "#151c27",
+              "secondary": "#585f6c",
+              "inverse-on-surface": "#f0f1f1",
+              "tertiary-fixed-dim": "#404758",
+              "outline-variant": "#c6c6c6",
+              "primary-fixed-dim": "#474747",
+              "tertiary-container": "#6e7487",
+              "on-surface-variant": "#474747",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "on-surface": "#1a1c1c",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#ffffff",
+              "tertiary-fixed": "#575e70",
+              "tertiary": "#343b4c",
+              "surface": "#f9f9f9",
+              "outline": "#777777",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "surface-variant": "#e2e2e2",
+              "secondary-fixed": "#c0c7d6",
+              "primary-container": "#3b3b3b",
+              "inverse-primary": "#c6c6c6",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#151c27",
+              "on-primary-container": "#ffffff",
+              "on-tertiary": "#dce2f7",
+              "inverse-surface": "#2f3131",
+              "surface-container": "#eeeeee",
+              "secondary-container": "#ced4e4",
+              "on-error": "#ffffff",
+              "surface-container-high": "#e8e8e8",
+              "on-tertiary-fixed": "#ffffff",
+              "on-tertiary-fixed-variant": "#dce2f7",
+              "primary-fixed": "#5e5e5e",
+              "on-background": "#1a1c1c",
+              "surface-container-highest": "#e2e2e2",
+              "background": "#f9f9f9",
+              "on-tertiary-container": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface text-on-surface flex items-center justify-center min-h-screen p-4 overflow-hidden">
+<!-- Intentional Void Background -->
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-surface-container-low rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+<div class="absolute top-1/2 -right-24 w-64 h-64 bg-surface-container-high rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+</div>
+<!-- Login Container -->
+<main class="relative z-10 w-full max-w-md">
+<!-- Branding Header -->
+<div class="text-center mb-12">
+<h1 class="text-xl font-extrabold tracking-tighter text-on-surface mb-2">EduSetu</h1>
+<p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Student Analytics System</p>
+</div>
+<!-- Login Card -->
+<div class="surface-container-lowest glass-effect rounded-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.04)] p-10 border-0">
+<header class="mb-10">
+<h2 class="text-2xl font-semibold tracking-tight text-on-surface leading-tight">Welcome back</h2>
+<p class="text-sm text-on-surface-variant mt-2 font-regular">Access your academic command center.</p>
+</header>
+<form action="#" class="space-y-8" onsubmit="return false;">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant" for="email">Email Address</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant" id="email" name="email" placeholder="user@example.com" required="" type="email"/>
+<div class="absolute bottom-0 left-0 h-[1px] w-full bg-outline-variant/20"></div>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant" for="password">Password</label>
+<a class="text-[10px] font-bold text-primary hover:underline transition-all" href="#">Forgot?</a>
+</div>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<div class="absolute bottom-0 left-0 h-[1px] w-full bg-outline-variant/20"></div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="pt-4">
+<button class="w-full h-12 flex items-center justify-center rounded-xl bg-gradient-to-b from-[#3b3b3b] to-[#000000] text-on-primary font-semibold text-sm tracking-wide shadow-lg hover:shadow-xl active:scale-[0.98] transition-all duration-200" type="submit">
+                        Sign in to Dashboard
+                    </button>
+</div>
+</form>
+<!-- Institutional Footnote -->
+<footer class="mt-10 pt-8 flex items-center justify-center space-x-2">
+<div class="w-8 h-[1px] bg-outline-variant/20"></div>
+<span class="text-[10px] text-on-surface-variant font-medium">SECURED BY EDUSETU PROTOCOL</span>
+<div class="w-8 h-[1px] bg-outline-variant/20"></div>
+</footer>
+</div>
+<!-- System Status Decor -->
+<div class="mt-8 flex justify-between items-center px-2">
+<div class="flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-tight">Systems Operational</span>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-[10px] font-medium text-on-surface-variant hover:text-primary transition-colors">HELP</button>
+<button class="text-[10px] font-medium text-on-surface-variant hover:text-primary transition-colors">PRIVACY</button>
+</div>
+</div>
+</main>
+<!-- Visual Texture Image (Subtle, background layer) -->
+<div class="fixed bottom-0 right-0 opacity-[0.03] pointer-events-none select-none">
+<img alt="abstract geometry and architectural grid pattern" class="w-[800px] h-auto" data-alt="abstract geometry and architectural grid pattern" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzyLF0mA_J7bpWp3bXXE7tcpeEJf6cK62JYDaTkH7YfmiT7LelVTl6oxGVuP-L1c_BGeU0OZDS-zJWkdMlR91j8PKdgU_BtSCfPI5B5BOdDG4M1FKHEJEwFySnpEl8I4BeoPpY9NbA-s2ohJG1rTwCRJmPWXeHRd3ppqY-Cok0MkTBu2LBUftwl_Vpdj_HvqrbwoDlmO62zsAvksiSZI-0TGdtlwYY_4lTSldxP0vxj4X707zLA1lojGkVMHtT4YxqmqC2zTWg3fJK"/>
+</div>
+</body></html>
