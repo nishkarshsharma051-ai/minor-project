@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#353c48",
+              "secondary-fixed-dim": "#a4abbb",
+              "primary": "#000000",
+              "surface-tint": "#5e5e5e",
+              "surface-container-low": "#f3f3f4",
+              "on-primary": "#e2e2e2",
+              "on-error-container": "#410002",
+              "surface-dim": "#dadada",
+              "on-secondary-container": "#151c27",
+              "secondary": "#585f6c",
+              "inverse-on-surface": "#f0f1f1",
+              "tertiary-fixed-dim": "#404758",
+              "outline-variant": "#c6c6c6",
+              "primary-fixed-dim": "#474747",
+              "tertiary-container": "#6e7487",
+              "on-surface-variant": "#474747",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "on-surface": "#1a1c1c",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#ffffff",
+              "tertiary-fixed": "#575e70",
+              "tertiary": "#343b4c",
+              "surface": "#f9f9f9",
+              "outline": "#777777",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "surface-variant": "#e2e2e2",
+              "secondary-fixed": "#c0c7d6",
+              "primary-container": "#3b3b3b",
+              "inverse-primary": "#c6c6c6",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#151c27",
+              "on-primary-container": "#ffffff",
+              "on-tertiary": "#dce2f7",
+              "inverse-surface": "#2f3131",
+              "surface-container": "#eeeeee",
+              "secondary-container": "#ced4e4",
+              "on-error": "#ffffff",
+              "surface-container-high": "#e8e8e8",
+              "on-tertiary-fixed": "#ffffff",
+              "on-tertiary-fixed-variant": "#dce2f7",
+              "primary-fixed": "#5e5e5e",
+              "on-background": "#1a1c1c",
+              "surface-container-highest": "#e2e2e2",
+              "background": "#f9f9f9",
+              "on-tertiary-container": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col bg-black dark:bg-neutral-950 py-6 z-40">
+<div class="px-6 mb-10">
+<span class="text-white font-bold text-xl tracking-tighter">EduSetu</span>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center px-4 py-3 text-neutral-400 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="grid_view">grid_view</span>
+<span class="text-sm font-regular">Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 text-neutral-400 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="group">group</span>
+<span class="text-sm font-regular">Student Data</span>
+</a>
+<a class="flex items-center px-4 py-3 text-neutral-400 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="online_prediction">online_prediction</span>
+<span class="text-sm font-regular">Prediction</span>
+</a>
+<a class="flex items-center px-4 py-3 text-neutral-400 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="analytics">analytics</span>
+<span class="text-sm font-regular">Analytics</span>
+</a>
+<a class="flex items-center px-4 py-3 bg-neutral-800 text-white rounded-lg mx-2 my-1" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="description">description</span>
+<span class="text-sm font-regular">Reports</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center space-x-3 p-2 bg-neutral-900 rounded-lg">
+<div class="w-8 h-8 rounded bg-neutral-700 flex items-center justify-center text-[10px] text-white font-bold uppercase tracking-widest">
+                    INS
+                </div>
+<div class="flex flex-col">
+<span class="text-white text-xs font-semibold">Admin Panel</span>
+<span class="text-neutral-500 text-[10px] uppercase tracking-widest font-bold">Manager</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md z-30 shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-8 w-full h-full">
+<h1 class="text-neutral-900 dark:text-white font-bold text-lg">Reports</h1>
+<div class="flex items-center space-x-6">
+<div class="relative hidden lg:block">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-neutral-400 text-sm">search</span>
+</div>
+<input class="bg-surface-container-high border-none rounded-full py-2 pl-10 pr-4 text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search data..." type="text"/>
+</div>
+<div class="flex items-center space-x-2">
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all text-neutral-500">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all text-neutral-500">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-neutral-200 ml-2 overflow-hidden">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="Portrait of a male professional avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4kk1_r7b_Bw7YfFKS0M-A9j55uVny-MLb1TinDuM2v3oq6QarSRL1i5LVtP0S-o6IHufLKuUlpYtpQRrJA-vnstz5rS0Oy9uIEK9iRgowueEf4p96g629C2k7TREMGGJ9x_OlfLpG0FOE6NITSLuNIzNIxtv8bfZhFlWv25JvaRq6Q6xhn2Boaqrvksno4GMDkHi8Tq8mLP4rug-_VMOdyl10QrIO-a2BeJZTgFUQhGcIcyPBnoMHRxBWhf3zPOmTFeIQw2P4qgV2"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-24 pb-12 px-8 min-h-screen">
+<!-- Action Header -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<p class="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Academic Insights</p>
+<h2 class="text-4xl font-semibold tracking-tight text-neutral-900">Student Risk Assessment</h2>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded shadow-lg hover:opacity-90 transition-all flex items-center space-x-2">
+<span class="material-symbols-outlined text-sm">download</span>
+<span class="text-sm font-medium">Download Report</span>
+</button>
+</div>
+<!-- Metric Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Total Students</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-5xl font-semibold tracking-tighter">1,284</span>
+<span class="text-xs text-neutral-400 font-medium">+12%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">At Risk</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-5xl font-semibold tracking-tighter text-error">42</span>
+<span class="text-xs text-neutral-400 font-medium">3.2%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Avg Prediction</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-5xl font-semibold tracking-tighter">88%</span>
+<span class="text-xs text-neutral-400 font-medium">Stable</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl border-none">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Reports Generated</span>
+<div class="flex items-baseline space-x-2">
+<span class="text-5xl font-semibold tracking-tighter">15</span>
+<span class="text-xs text-neutral-400 font-medium">This Week</span>
+</div>
+</div>
+</div>
+<!-- Table Section -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden">
+<div class="px-8 py-6 flex justify-between items-center">
+<h3 class="text-lg font-semibold">Predicted Performance Results</h3>
+<div class="flex space-x-4">
+<button class="text-xs font-bold uppercase tracking-widest text-neutral-500 hover:text-black transition-colors">Filter</button>
+<button class="text-xs font-bold uppercase tracking-widest text-neutral-500 hover:text-black transition-colors">Sort</button>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-neutral-500">Student Name</th>
+<th class="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-neutral-500">Predicted Score</th>
+<th class="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-neutral-500">Success Probability</th>
+<th class="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-neutral-500">Risk Level</th>
+<th class="px-8 py-4 text-[10px] uppercase tracking-widest font-bold text-neutral-500 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">JD</div>
+<span class="text-sm font-medium text-on-surface">Jameson Darnell</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-regular">84 / 100</td>
+<td class="px-8 py-5 text-sm font-regular">92%</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button>
+</td>
+</tr>
+<!-- Highlighted At-Risk Student -->
+<tr class="bg-neutral-200 group transition-colors border-l-4 border-black">
+<td class="px-8 py-5">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-neutral-300 flex items-center justify-center text-xs font-bold">AL</div>
+<span class="text-sm font-bold text-on-surface">Amara Lawson</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-medium">42 / 100</td>
+<td class="px-8 py-5 text-sm font-medium">28%</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-black text-white rounded">Critical</span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="material-symbols-outlined text-black">warning</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">EM</div>
+<span class="text-sm font-medium text-on-surface">Elena Martinez</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-regular">78 / 100</td>
+<td class="px-8 py-5 text-sm font-regular">81%</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button>
+</td>
+</tr>
+<!-- Highlighted At-Risk Student -->
+<tr class="bg-neutral-200 group transition-colors border-l-4 border-black">
+<td class="px-8 py-5">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-neutral-300 flex items-center justify-center text-xs font-bold">TB</div>
+<span class="text-sm font-bold text-on-surface">Tobias Belcher</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-medium">56 / 100</td>
+<td class="px-8 py-5 text-sm font-medium">45%</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-600 text-white rounded">Medium</span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="material-symbols-outlined text-black">priority_high</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">SR</div>
+<span class="text-sm font-medium text-on-surface">Sasha Romanov</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-regular">94 / 100</td>
+<td class="px-8 py-5 text-sm font-regular">98%</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-high transition-colors">
+<td class="px-8 py-5">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">KW</div>
+<span class="text-sm font-medium text-on-surface">Kai Wong</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-regular">88 / 100</td>
+<td class="px-8 py-5 text-sm font-regular">90%</td>
+<td class="px-8 py-5">
+<span class="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
+</td>
+<td class="px-8 py-5 text-right">
+<button class="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-8 py-6 bg-surface-container-low flex justify-between items-center">
+<p class="text-xs font-medium text-neutral-500">Showing 6 of 1,284 students</p>
+<div class="flex space-x-2">
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded bg-black text-white flex items-center justify-center text-xs font-bold">1</button>
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors text-xs">2</button>
+<button class="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Analytical Footer Cards -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-lowest p-8 rounded-xl">
+<h4 class="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-6">Historical Comparison</h4>
+<div class="flex items-end space-x-4 h-40">
+<div class="flex-1 bg-neutral-100 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-neutral-200 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-neutral-300 h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-neutral-400 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-black h-[95%] rounded-t-sm"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+<span>Oct</span>
+<span>Nov</span>
+<span>Dec</span>
+<span>Jan</span>
+<span>Feb</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between">
+<div>
+<h4 class="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-2">Trend Analysis</h4>
+<p class="text-sm text-neutral-500 leading-relaxed">Risk factors have decreased by 2.4% since the last reporting cycle. Predictive modeling suggests a continued stabilization through Q3.</p>
+</div>
+<div class="pt-6">
+<button class="text-black text-xs font-bold uppercase tracking-widest underline decoration-2 underline-offset-4">View detailed trends</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

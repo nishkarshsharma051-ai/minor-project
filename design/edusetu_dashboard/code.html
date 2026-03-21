@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduSetu Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#353c48",
+              "secondary-fixed-dim": "#a4abbb",
+              "primary": "#000000",
+              "surface-tint": "#5e5e5e",
+              "surface-container-low": "#f3f3f4",
+              "on-primary": "#e2e2e2",
+              "on-error-container": "#410002",
+              "surface-dim": "#dadada",
+              "on-secondary-container": "#151c27",
+              "secondary": "#585f6c",
+              "inverse-on-surface": "#f0f1f1",
+              "tertiary-fixed-dim": "#404758",
+              "outline-variant": "#c6c6c6",
+              "primary-fixed-dim": "#474747",
+              "tertiary-container": "#6e7487",
+              "on-surface-variant": "#474747",
+              "on-secondary": "#ffffff",
+              "error": "#ba1a1a",
+              "on-surface": "#1a1c1c",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed": "#ffffff",
+              "tertiary-fixed": "#575e70",
+              "tertiary": "#343b4c",
+              "surface": "#f9f9f9",
+              "outline": "#777777",
+              "surface-bright": "#f9f9f9",
+              "on-primary-fixed-variant": "#e2e2e2",
+              "surface-variant": "#e2e2e2",
+              "secondary-fixed": "#c0c7d6",
+              "primary-container": "#3b3b3b",
+              "inverse-primary": "#c6c6c6",
+              "error-container": "#ffdad6",
+              "on-secondary-fixed": "#151c27",
+              "on-primary-container": "#ffffff",
+              "on-tertiary": "#dce2f7",
+              "inverse-surface": "#2f3131",
+              "surface-container": "#eeeeee",
+              "secondary-container": "#ced4e4",
+              "on-error": "#ffffff",
+              "surface-container-high": "#e8e8e8",
+              "on-tertiary-fixed": "#ffffff",
+              "on-tertiary-fixed-variant": "#dce2f7",
+              "primary-fixed": "#5e5e5e",
+              "on-background": "#1a1c1c",
+              "surface-container-highest": "#e2e2e2",
+              "background": "#f9f9f9",
+              "on-tertiary-container": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .grid-subtle {
+            background-image: linear-gradient(to right, #e2e2e2 1px, transparent 1px),
+                              linear-gradient(to bottom, #e2e2e2 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .data-monolith-gradient {
+            background: linear-gradient(180deg, #3b3b3b 0%, #000000 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 flex flex-col bg-black dark:bg-neutral-950 py-6 z-50">
+<div class="px-6 mb-10">
+<span class="text-white font-bold text-xl tracking-tighter">EduSetu</span>
+</div>
+<nav class="flex-grow space-y-1">
+<!-- Dashboard (Active) -->
+<a class="bg-neutral-800 text-white rounded-lg mx-2 my-1 flex items-center px-4 py-3 transition-all duration-200 scale-[0.98]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="grid_view">grid_view</span>
+<span class="text-sm font-regular Inter">Dashboard</span>
+</a>
+<!-- Student Data -->
+<a class="text-neutral-400 hover:text-white hover:bg-neutral-800 mx-2 my-1 flex items-center px-4 py-3 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="group">group</span>
+<span class="text-sm font-regular Inter">Student Data</span>
+</a>
+<!-- Prediction -->
+<a class="text-neutral-400 hover:text-white hover:bg-neutral-800 mx-2 my-1 flex items-center px-4 py-3 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="online_prediction">online_prediction</span>
+<span class="text-sm font-regular Inter">Prediction</span>
+</a>
+<!-- Analytics -->
+<a class="text-neutral-400 hover:text-white hover:bg-neutral-800 mx-2 my-1 flex items-center px-4 py-3 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="analytics">analytics</span>
+<span class="text-sm font-regular Inter">Analytics</span>
+</a>
+<!-- Reports -->
+<a class="text-neutral-400 hover:text-white hover:bg-neutral-800 mx-2 my-1 flex items-center px-4 py-3 rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="description">description</span>
+<span class="text-sm font-regular Inter">Reports</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center overflow-hidden">
+<img alt="Institution Logo" data-alt="A minimalist architectural icon of a university building" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8HLmSAJOxVd4go9ScMc2ls8kT9Xk-wmHMRAzqdzSOGQUEgExNNOwQRtIG-x-iXfJySbRmYOpwtbXbYDpKUNDtCRqSLsksPgcK25vb-Iy3ya1prbufbgZvYzYE4TBb87wnDrZR8pFOnRbyLSnAHcSBRJG8j-S5aom1LVvb6-4UzfBm3HiLanUx4hfQIWMapqZprujqsHfN7jc26sOAYt61acavz4RW5-P5VxkxyRbo_SESUkKV5PbGNQ6TIVwQQXHXOOyM1bRcpsag"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest font-bold text-neutral-500">Institution</span>
+<span class="text-xs text-white">Main Campus</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 left-64 h-16 z-30 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-8 w-full h-full">
+<h1 class="text-xl font-semibold Inter text-neutral-900 dark:text-neutral-50">Dashboard</h1>
+<div class="flex items-center gap-6">
+<!-- Search Bar -->
+<div class="relative flex items-center bg-surface-container-high rounded-full px-4 py-1.5 w-64">
+<span class="material-symbols-outlined text-neutral-400 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs w-full ml-2 text-neutral-700" placeholder="Search data..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all text-neutral-500">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all text-neutral-500">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/15">
+<img alt="User Profile Avatar" data-alt="Profile headshot of a professional educator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbjnFNeHo0UvB2F5mZgC2qb19i0jllaBXcxD5RUlOX5p0KT3m41USDzWpXd558kcXMiJmIwI1UQa4vY3pCvgA3l00Zwa1KvVY9rna5xCAb-2jPwI7GO0AQGoAJM_j9hb5GNoc5ygI1CaEyPxzQGufX93iNjJ8G6ZIJV_OtoZSW4sO3lThaNt0HluEDlUFxagJx9cI9vX_3o9r6iuX9Mc2gMgRwDhpeN5yrmWjuhiPNxv7WgGHkSU9bmjfeBVvwfqHxXx8FeXVQlRT4"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 min-h-screen bg-white grid-subtle">
+<div class="p-12 max-w-7xl mx-auto">
+<!-- Dashboard Headline -->
+<div class="mb-12">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">System Overview</span>
+<h2 class="text-4xl font-extrabold tracking-tight text-primary">Academic Performance</h2>
+</div>
+<!-- KPI Cards: Bento Style -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+<!-- Total Students -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/15 flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
+<div>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">Total Students</span>
+<div class="text-6xl font-semibold tracking-tighter text-primary">1,245</div>
+</div>
+<div class="mt-6 flex items-center text-xs text-neutral-500">
+<span class="material-symbols-outlined text-sm mr-1 text-green-600" data-icon="trending_up">trending_up</span>
+<span>+2.4% from last semester</span>
+</div>
+</div>
+<!-- Average Performance -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/15 flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
+<div>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">Avg. Performance</span>
+<div class="text-6xl font-semibold tracking-tighter text-primary">78.4<span class="text-3xl font-medium">%</span></div>
+</div>
+<div class="mt-6 flex items-center text-xs text-neutral-500">
+<span class="material-symbols-outlined text-sm mr-1 text-neutral-400" data-icon="horizontal_rule">horizontal_rule</span>
+<span>Stable across departments</span>
+</div>
+</div>
+<!-- At-Risk Students -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/15 flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
+<div>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">At-Risk Students</span>
+<div class="text-6xl font-semibold tracking-tighter text-primary">42</div>
+</div>
+<div class="mt-6 flex items-center text-xs text-error">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="priority_high">priority_high</span>
+<span>Requires immediate action</span>
+</div>
+</div>
+</div>
+<!-- Analytics Visualizations -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Primary Performance Chart -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/15">
+<div class="flex justify-between items-end mb-8">
+<div>
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">Performance Trend</span>
+<h3 class="text-xl font-semibold">Institutional Growth</h3>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold">WEEKLY</span>
+<span class="px-3 py-1 bg-primary text-on-primary rounded-full text-[10px] font-bold">MONTHLY</span>
+</div>
+</div>
+<!-- SVG Chart Mockup -->
+<div class="h-64 w-full relative">
+<svg class="w-full h-full" viewbox="0 0 800 200">
+<path d="M0,180 Q100,160 200,120 T400,100 T600,60 T800,40" fill="none" stroke="black" stroke-width="3"></path>
+<path d="M0,190 Q100,180 200,160 T400,150 T600,130 T800,120" fill="none" stroke="#c6c6c6" stroke-dasharray="8 4" stroke-width="2"></path>
+<!-- Grid Points -->
+<circle cx="200" cy="120" fill="black" r="4"></circle>
+<circle cx="400" cy="100" fill="black" r="4"></circle>
+<circle cx="600" cy="60" fill="black" r="4"></circle>
+</svg>
+<div class="absolute bottom-0 w-full flex justify-between text-[10px] font-bold text-neutral-400 mt-4 px-2">
+<span>SEP</span>
+<span>OCT</span>
+<span>NOV</span>
+<span>DEC</span>
+<span>JAN</span>
+<span>FEB</span>
+</div>
+</div>
+</div>
+<!-- Secondary Metric / Risk List -->
+<div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/15">
+<span class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-6 block">Critical Alerts</span>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-sm" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Attendance Drop</p>
+<p class="text-xs text-neutral-500">Year 3 Engineering decreased by 15%</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="task_alt">task_alt</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Reports Generated</p>
+<p class="text-xs text-neutral-500">Quarterly performance audit ready</p>
+</div>
+</div>
+<div class="pt-6">
+<button class="w-full data-monolith-gradient text-on-primary py-3 rounded-lg text-sm font-medium transition-transform active:scale-95 shadow-md">
+                                View Detailed Analytics
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Data Section -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="md:col-span-3 bg-surface-container-low/30 p-1 rounded-xl">
+<div class="bg-white rounded-lg p-6 flex items-center justify-between border border-outline-variant/10 shadow-sm">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-neutral-400">Next Audit</span>
+<span class="text-sm font-semibold">March 14, 2024</span>
+</div>
+<div class="h-8 w-[1px] bg-neutral-200"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase font-bold text-neutral-400">Assigned To</span>
+<span class="text-sm font-semibold">Dr. Sarah Chen</span>
+</div>
+</div>
+<div class="flex -space-x-2">
+<img alt="Avatar 1" class="w-6 h-6 rounded-full ring-2 ring-white" data-alt="Small circular profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaVhCOBUG0dj8Afy6yZJ9S_l-Bc_ZVhzlznKQjIhmF5JVSV0W-JlIIjHsD59O2ed5H8FkVElvaMOkVgzW8MMdKo_k8y89c2LvHtJIGl59zQYvKgwAIMJhGi2LgH3S8ajqAc-0XGgg36f0IFYuXPkQVV-nuzjKp18n-QPeQnlC0Wz-7haKddBnhVGFt28Mhw5oWE2gEwxxOatNJksqQDLEC_OqzAA90Hu5Kb5uHjCHLYKcqZCcu6CboxIyF922jR45pUTc5a5pv8Rnl"/>
+<img alt="Avatar 2" class="w-6 h-6 rounded-full ring-2 ring-white" data-alt="Small circular profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-UX09M6fKihxmQgadAi0_Iuq46F_Vqlw3uXEH7-lSGhxljVfQACH0FOa3IuPtFGMsg_zuqKvL_AFIqMbjY65YQ0UxM-keAk08zqLlNdTJ1LhBRCrmcalyBEy7tRwIKsjvxp7F7nxqio1RFJvCfb1Wjv0vM6-em59_yTRJHquxR1rEfqe0sQ9BikBIL9X03NeO3yYTCJRPj8_HbjGeESlH763sMYXBBKsScgzQfFqCs2NrRJgzv68Af-IcurlXbq0J-ShQbcmZQbbq"/>
+<img alt="Avatar 3" class="w-6 h-6 rounded-full ring-2 ring-white" data-alt="Small circular profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRhwqDlTvGuZjaTBikzpvDfDPlMUrw5wZ9TjugtVCn6qimMqjIt0JS3o_BQscVrHrYYCFqGdUqfeKWLVjz6fz2rgC9_oS5SuOzV6kbfmG6-oepCGM45NpFjK5uJ0x_ove55rInwgSYAEfKFiDTD5cMSOiyKqd11LOQNi4lA41Sfn3iPYlm-fihrixg-b8eqI7I8dOdE83nNifmPqOE901U3qxC1PwJo-EAZw5P7vx3VigfbmoRjo0vOZdC4JL2SNLe1tDTFCVXtW6u"/>
+<div class="w-6 h-6 rounded-full bg-neutral-100 ring-2 ring-white flex items-center justify-center text-[8px] font-bold">+4</div>
+</div>
+</div>
+</div>
+<div class="bg-primary p-6 rounded-xl flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-white mb-2" data-icon="bolt">bolt</span>
+<span class="text-white font-bold text-xs uppercase tracking-widest">AI Prediction</span>
+<p class="text-neutral-400 text-[10px] mt-1">94% Accuracy Rate</p>
+</div>
+</div>
+</div>
+</main>
+</body></html>
