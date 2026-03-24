@@ -86,3 +86,4 @@ Retrains the model with new samples without requiring a restart.
 - The model uses `n_jobs=-1` to leverage all CPU cores during training.
 - Use `gunicorn` with multiple workers for concurrent request handling.
 - The model is cached in memory at startup for low-latency predictions.
+ 
