@@ -3,13 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Dashboard from './pages/Dashboard';
 import Prediction from './pages/Prediction';
 import Login from './pages/Login';
-
-// Mock components for other pages
-const Placeholder = ({ name }) => (
-  <div className="flex items-center justify-center h-[200px] bg-neutral-50 border-2 border-dashed border-neutral-200 rounded-xl text-neutral-400">
-    {name} Implementation Coming Soon
-  </div>
-);
+import Analytics from './pages/Analytics';
+import StudentData from './pages/StudentData';
+import Reports from './pages/Reports';
 
 function App() {
   const isAuthenticated = true; // Temporary mock
@@ -27,9 +23,9 @@ function App() {
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/prediction" element={<Prediction />} />
-                <Route path="/student-data" element={<div className="ml-64 pt-24 px-10"><Placeholder name="Student Data" /></div>} />
-                <Route path="/analytics" element={<div className="ml-64 pt-24 px-10"><Placeholder name="Analytics" /></div>} />
-                <Route path="/reports" element={<div className="ml-64 pt-24 px-10"><Placeholder name="Reports" /></div>} />
+                <Route path="/student-data" element={<StudentData />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/reports" element={<Reports />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             ) : (
