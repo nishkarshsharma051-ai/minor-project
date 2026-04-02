@@ -1,6 +1,6 @@
 import logging
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 
 from routes.health   import health_bp
 from routes.predict  import predict_bp
@@ -18,7 +18,8 @@ logger = logging.getLogger(__name__)
 
 def create_app() -> Flask:
     """Application factory for the ScholarMetrics API."""
-    app = Flask(__name__)
+    frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist'))
+    app = Flask(__name__, static_folder=frontend_dir, static_url_path='/')
 
     # Load model on startup
     try:
@@ -52,6 +53,14 @@ def create_app() -> Flask:
     def internal_error(e):
         logger.exception("Unexpected server error")
         return jsonify({"error": "Internal server error", "message": str(e)}), 500
+
+    @app.route("/", defaults={"path": ""})
+    @app.route("/<path:path>")
+    def serve(path):
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+            return send_from_directory(app.static_folder, path)
+        else:
+            return send_from_directory(app.static_folder, "index.html")
 
     @app.before_request
     def check_model():

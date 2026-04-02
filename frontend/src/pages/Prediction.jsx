@@ -24,7 +24,7 @@ const Prediction = () => {
     setError(null);
     try {
       // Note: In development, we use relative URL. Vite proxy will handle port 5001.
-      const response = await axios.post('/api/predict', formData);
+      const response = await axios.post('/predict', formData);
       setResult(response.data);
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to get prediction. Ensure backend is running.');
