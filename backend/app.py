@@ -6,7 +6,13 @@ from routes.health   import health_bp
 from routes.predict  import predict_bp
 from routes.train    import train_bp
 from routes.download import download_bp
+from routes.students import students_bp
 from utils.model_utils import load_model
+from models.student_model import db
+from dotenv import load_dotenv
+
+# Load env variables from .env
+load_dotenv()
 
 # Setting up basic logging
 logging.basicConfig(
@@ -20,6 +26,11 @@ def create_app() -> Flask:
     """Application factory for the ScholarMetrics API."""
     frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist'))
     app = Flask(__name__, static_folder=frontend_dir, static_url_path='/')
+
+    # Database setup
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    db.init_app(app)
 
     # Load model on startup
     try:
@@ -35,6 +46,7 @@ def create_app() -> Flask:
     app.register_blueprint(predict_bp)
     app.register_blueprint(train_bp)
     app.register_blueprint(download_bp)
+    app.register_blueprint(students_bp)
 
     # Standard error handlers
     @app.errorhandler(400)

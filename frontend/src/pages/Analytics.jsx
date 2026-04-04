@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 
 const Analytics = () => {
+  const [data, setData] = useState({
+    institutionalPerformance: 0,
+    avgAttendance: 0,
+    retentionRate: 0,
+    passVsFail: { passingPercentage: 0 },
+    scatterPoints: []
+  });
+
+  useEffect(() => {
+    fetch('/api/analytics')
+      .then(res => res.json())
+      .then(payload => setData(payload))
+      .catch(err => console.error(err));
+  }, []);
   return (
     <Layout title="Analytics">
       {/* Hero Metric Section - Asymmetric Density */}
       <section className="grid grid-cols-12 gap-8 mb-12">
         <div className="col-span-12 md:col-span-7 flex flex-col justify-end">
           <p className="label-sm text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2">Institutional Performance</p>
-          <h2 className="text-6xl font-extrabold tracking-tight text-primary leading-none">84.2<span className="text-3xl font-medium text-neutral-400">%</span></h2>
+          <h2 className="text-6xl font-extrabold tracking-tight text-primary leading-none">{data.institutionalPerformance}<span className="text-3xl font-medium text-neutral-400">%</span></h2>
           <p className="body-md text-on-surface-variant mt-4 max-w-md leading-relaxed">Overall academic efficiency index calculated across all departments for the current semester cycle.</p>
         </div>
         
@@ -17,7 +31,7 @@ const Analytics = () => {
             <span className="material-symbols-outlined text-neutral-400">trending_up</span>
             <div>
               <p className="text-sm font-medium text-neutral-500">Avg. Attendance</p>
-              <p className="text-2xl font-bold">92%</p>
+              <p className="text-2xl font-bold">{data.avgAttendance}%</p>
             </div>
           </div>
           
@@ -25,7 +39,7 @@ const Analytics = () => {
             <span className="material-symbols-outlined text-neutral-400">bolt</span>
             <div>
               <p className="text-sm font-medium text-neutral-500">Retention Rate</p>
-              <p className="text-2xl font-bold">97.4%</p>
+              <p className="text-2xl font-bold">{data.retentionRate}%</p>
             </div>
           </div>
         </div>
@@ -84,11 +98,11 @@ const Analytics = () => {
           <div className="flex-1 flex flex-col items-center justify-center relative">
             <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" fill="transparent" r="40" stroke="#f3f3f4" strokeWidth="12"></circle>
-              <circle cx="50" cy="50" fill="transparent" r="40" stroke="#000000" strokeDasharray="213.6 251.2" strokeLinecap="round" strokeWidth="12"></circle>
-              <circle cx="50" cy="50" fill="transparent" r="40" stroke="#e2e2e2" strokeDasharray="37.6 251.2" strokeDashoffset="-213.6" strokeLinecap="round" strokeWidth="12"></circle>
+              {/* Dynamic SVG mapping based on passing percentage */}
+              <circle cx="50" cy="50" fill="transparent" r="40" stroke="#000000" strokeDasharray={`${(data.passVsFail.passingPercentage / 100) * 251.2} 251.2`} strokeLinecap="round" strokeWidth="12"></circle>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-3xl font-bold">85%</span>
+              <span className="text-3xl font-bold">{data.passVsFail.passingPercentage}%</span>
               <span className="text-[10px] text-neutral-400 uppercase font-bold tracking-widest">Passing</span>
             </div>
           </div>
@@ -119,18 +133,18 @@ const Analytics = () => {
           </div>
           
           <div className="flex-1 relative border-l-2 border-b-2 border-surface-container-low mb-8 ml-8">
-            <div className="absolute bottom-[20%] left-[15%] w-2 h-2 bg-neutral-300 rounded-full"></div>
-            <div className="absolute bottom-[40%] left-[30%] w-3 h-3 bg-neutral-400 rounded-full opacity-60"></div>
-            <div className="absolute bottom-[35%] left-[25%] w-2 h-2 bg-neutral-200 rounded-full"></div>
-            <div className="absolute bottom-[60%] left-[50%] w-2 h-2 bg-neutral-500 rounded-full"></div>
-            <div className="absolute bottom-[55%] left-[45%] w-2.5 h-2.5 bg-neutral-400 rounded-full"></div>
-            <div className="absolute bottom-[80%] left-[85%] w-4 h-4 bg-primary rounded-full shadow-lg"></div>
-            <div className="absolute bottom-[75%] left-[80%] w-2 h-2 bg-neutral-800 rounded-full"></div>
-            <div className="absolute bottom-[85%] left-[90%] w-2 h-2 bg-neutral-600 rounded-full"></div>
-            <div className="absolute bottom-[45%] left-[65%] w-2 h-2 bg-neutral-300 rounded-full"></div>
-            <div className="absolute bottom-[70%] left-[75%] w-2 h-2 bg-neutral-500 rounded-full"></div>
-            <div className="absolute bottom-[25%] left-[10%] w-2 h-2 bg-neutral-200 rounded-full"></div>
-            <div className="absolute bottom-[90%] left-[95%] w-3 h-3 bg-neutral-700 rounded-full"></div>
+            {/* Dynamic Plotting */}
+            {data.scatterPoints.map((point, index) => (
+              <div 
+                key={index}
+                className="absolute w-2 h-2 bg-neutral-800 rounded-full opacity-60 hover:w-3 hover:h-3 hover:bg-primary transition-all"
+                style={{ 
+                  left: `${(point.x / 14) * 100}%`, 
+                  bottom: `${point.y}%` 
+                }}
+                title={`Study Hours: ${point.x}, Marks: ${point.y}`}
+              ></div>
+            ))}
             
             <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">Study Hours (per week)</div>
             <div className="absolute -left-12 top-1/2 -rotate-90 -translate-y-1/2 text-[10px] font-bold uppercase tracking-widest text-neutral-400">Final Score</div>

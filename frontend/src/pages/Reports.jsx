@@ -1,7 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 
 const Reports = () => {
+  const [students, setStudents] = useState([]);
+  const [summary, setSummary] = useState({ totalStudents: 0, avgPerformance: 0, atRiskStudents: 0 });
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  
+  useEffect(() => {
+    fetch('/api/dashboard/summary')
+      .then(res => res.json())
+      .then(data => setSummary(data))
+      .catch(console.error);
+  }, []);
+  
+  useEffect(() => {
+    fetch(`/api/students?page=${page}&limit=5`)
+      .then(res => res.json())
+      .then(data => {
+        setStudents(data.data || []);
+        setTotalPages(data.totalPages || 1);
+      })
+      .catch(console.error);
+  }, [page]);
+
   return (
     <Layout title="Reports">
       {/* Action Header */}
@@ -10,9 +32,11 @@ const Reports = () => {
           <p className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-1">Academic Insights</p>
           <h2 className="text-4xl font-semibold tracking-tight text-neutral-900">Student Risk Assessment</h2>
         </div>
-        <button className="bg-primary text-on-primary px-6 py-2.5 rounded shadow-lg hover:opacity-90 transition-all flex items-center space-x-2">
+        <button 
+          onClick={() => window.open('/download-report?format=csv&marks=60&attendance=80&assignment_completion=50&participation=75&coding_score=85&communication_score=70')}
+          className="bg-primary text-on-primary px-6 py-2.5 rounded shadow-lg hover:opacity-90 transition-all flex items-center space-x-2">
           <span className="material-symbols-outlined text-sm">download</span>
-          <span className="text-sm font-medium">Download Report</span>
+          <span className="text-sm font-medium">Download Sample Report</span>
         </button>
       </div>
 
@@ -21,32 +45,32 @@ const Reports = () => {
         <div className="bg-surface-container-lowest p-6 rounded-xl border-none">
           <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Total Students</span>
           <div className="flex items-baseline space-x-2">
-            <span className="text-5xl font-semibold tracking-tighter">1,284</span>
-            <span className="text-xs text-neutral-400 font-medium">+12%</span>
+            <span className="text-5xl font-semibold tracking-tighter">{summary.totalStudents.toLocaleString()}</span>
+            <span className="text-xs text-neutral-400 font-medium">+ Live Sync</span>
           </div>
         </div>
         
         <div className="bg-surface-container-lowest p-6 rounded-xl border-none">
           <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">At Risk</span>
           <div className="flex items-baseline space-x-2">
-            <span className="text-5xl font-semibold tracking-tighter text-error">42</span>
-            <span className="text-xs text-neutral-400 font-medium">3.2%</span>
+            <span className="text-5xl font-semibold tracking-tighter text-error">{summary.atRiskStudents}</span>
+            <span className="text-xs text-neutral-400 font-medium">Flagged</span>
           </div>
         </div>
         
         <div className="bg-surface-container-lowest p-6 rounded-xl border-none">
           <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Avg Prediction</span>
           <div className="flex items-baseline space-x-2">
-            <span className="text-5xl font-semibold tracking-tighter">88%</span>
+            <span className="text-5xl font-semibold tracking-tighter">{summary.avgPerformance}%</span>
             <span className="text-xs text-neutral-400 font-medium">Stable</span>
           </div>
         </div>
         
         <div className="bg-surface-container-lowest p-6 rounded-xl border-none">
-          <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Reports Generated</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-4">Network Status</span>
           <div className="flex items-baseline space-x-2">
-            <span className="text-5xl font-semibold tracking-tighter">15</span>
-            <span className="text-xs text-neutral-400 font-medium">This Week</span>
+            <span className="text-5xl font-semibold tracking-tighter text-emerald-600">Up</span>
+            <span className="text-xs text-neutral-400 font-medium">Supabase</span>
           </div>
         </div>
       </div>
@@ -72,95 +96,62 @@ const Reports = () => {
               </tr>
             </thead>
             <tbody className="divide-y-0">
-              <tr className="group hover:bg-surface-container-high transition-colors">
-                <td className="px-8 py-5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">JD</div>
-                    <span className="text-sm font-medium text-on-surface">Jameson Darnell</span>
-                  </div>
-                </td>
-                <td className="px-8 py-5 text-sm font-regular">84 / 100</td>
-                <td className="px-8 py-5 text-sm font-regular">92%</td>
-                <td className="px-8 py-5">
-                  <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
-                </td>
-                <td className="px-8 py-5 text-right"><button className="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button></td>
-              </tr>
-              
-              {/* Highlighted At-Risk Student */}
-              <tr className="bg-neutral-200 group transition-colors border-l-4 border-black">
-                <td className="px-8 py-5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded bg-neutral-300 flex items-center justify-center text-xs font-bold">AL</div>
-                    <span className="text-sm font-bold text-on-surface">Amara Lawson</span>
-                  </div>
-                </td>
-                <td className="px-8 py-5 text-sm font-medium">42 / 100</td>
-                <td className="px-8 py-5 text-sm font-medium">28%</td>
-                <td className="px-8 py-5">
-                  <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-black text-white rounded">Critical</span>
-                </td>
-                <td className="px-8 py-5 text-right"><button className="material-symbols-outlined text-black">warning</button></td>
-              </tr>
-
-              <tr className="group hover:bg-surface-container-high transition-colors">
-                <td className="px-8 py-5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">EM</div>
-                    <span className="text-sm font-medium text-on-surface">Elena Martinez</span>
-                  </div>
-                </td>
-                <td className="px-8 py-5 text-sm font-regular">78 / 100</td>
-                <td className="px-8 py-5 text-sm font-regular">81%</td>
-                <td className="px-8 py-5">
-                  <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
-                </td>
-                <td className="px-8 py-5 text-right"><button className="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button></td>
-              </tr>
-              
-              {/* Highlighted Medium-Risk Student */}
-              <tr className="bg-neutral-200 group transition-colors border-l-4 border-black">
-                <td className="px-8 py-5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded bg-neutral-300 flex items-center justify-center text-xs font-bold">TB</div>
-                    <span className="text-sm font-bold text-on-surface">Tobias Belcher</span>
-                  </div>
-                </td>
-                <td className="px-8 py-5 text-sm font-medium">56 / 100</td>
-                <td className="px-8 py-5 text-sm font-medium">45%</td>
-                <td className="px-8 py-5">
-                  <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-600 text-white rounded">Medium</span>
-                </td>
-                <td className="px-8 py-5 text-right"><button className="material-symbols-outlined text-black">priority_high</button></td>
-              </tr>
-
-              <tr className="group hover:bg-surface-container-high transition-colors">
-                <td className="px-8 py-5">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded bg-neutral-100 flex items-center justify-center text-xs font-bold">SR</div>
-                    <span className="text-sm font-medium text-on-surface">Sasha Romanov</span>
-                  </div>
-                </td>
-                <td className="px-8 py-5 text-sm font-regular">94 / 100</td>
-                <td className="px-8 py-5 text-sm font-regular">98%</td>
-                <td className="px-8 py-5">
-                  <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
-                </td>
-                <td className="px-8 py-5 text-right"><button className="material-symbols-outlined text-neutral-400 hover:text-black">more_horiz</button></td>
-              </tr>
-              
+              {students.map((st) => (
+                <tr key={st.id} className={`${st.dropoutRisk === 'high' ? 'bg-neutral-200 border-l-4 border-black' : 'hover:bg-surface-container-high'} group transition-colors`}>
+                  <td className="px-8 py-5">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-8 h-8 rounded flex items-center justify-center text-xs font-bold ${st.dropoutRisk === 'high' ? 'bg-neutral-300' : 'bg-neutral-100'}`}>
+                        {st.initials}
+                      </div>
+                      <span className={`text-sm ${st.dropoutRisk === 'high' ? 'font-bold' : 'font-medium'} text-on-surface`}>{st.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-8 py-5 text-sm font-medium">{st.marks} / 100</td>
+                  <td className="px-8 py-5 text-sm font-medium">{st.attendance}%</td>
+                  <td className="px-8 py-5">
+                    {st.dropoutRisk === "high" ? (
+                      <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-black text-white rounded">Critical</span>
+                    ) : st.attendanceRisk ? (
+                      <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-600 text-white rounded">Medium</span>
+                    ) : (
+                      <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest bg-neutral-100 rounded">Low</span>
+                    )}
+                  </td>
+                  <td className="px-8 py-5 text-right">
+                    <button 
+                      onClick={() => window.open(`/download-report?format=pdf&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.studyHours * 10}&participation=80&coding_score=80&communication_score=80`)}
+                      className={`material-symbols-outlined text-sm px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
+                      title="Download PDF ML Report"
+                    >
+                      picture_as_pdf
+                    </button>
+                    <button 
+                      onClick={() => window.open(`/download-report?format=csv&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.studyHours * 10}&participation=80&coding_score=80&communication_score=80`)}
+                      className={`material-symbols-outlined text-sm px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ml-1 ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
+                      title="Download CSV Evaluation"
+                    >
+                      csv
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
         <div className="px-8 py-6 bg-surface-container-low flex justify-between items-center">
-          <p className="text-xs font-medium text-neutral-500">Showing 5 of 1,284 students</p>
+          <p className="text-xs font-medium text-neutral-500">Showing {students.length} of {summary.totalStudents} students</p>
           <div className="flex space-x-2">
-            <button className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors">
+            <button 
+              onClick={() => setPage(Math.max(1, page - 1))}
+              disabled={page === 1}
+              className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors disabled:opacity-50">
               <span className="material-symbols-outlined text-sm">chevron_left</span>
             </button>
-            <button className="w-8 h-8 rounded bg-black text-white flex items-center justify-center text-xs font-bold">1</button>
-            <button className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors text-xs">2</button>
-            <button className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors">
+            <button className="w-8 h-8 rounded bg-black text-white flex items-center justify-center text-xs font-bold">{page}</button>
+            <button 
+              onClick={() => setPage(Math.min(totalPages, page + 1))}
+              disabled={page >= totalPages}
+              className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors">
               <span className="material-symbols-outlined text-sm">chevron_right</span>
             </button>
           </div>

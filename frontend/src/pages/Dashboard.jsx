@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 
 const Dashboard = () => {
+  const [stats, setStats] = useState({
+    totalStudents: 0,
+    avgPerformance: 0,
+    atRiskStudents: 0
+  });
+
+  useEffect(() => {
+    fetch('/api/dashboard/summary')
+      .then(res => res.json())
+      .then(data => setStats(data))
+      .catch(err => console.error("Failed to fetch dashboard stats", err));
+  }, []);
+
   return (
     <Layout title="Dashboard">
       <div className="max-w-7xl mx-auto">
@@ -23,11 +36,13 @@ const Dashboard = () => {
               <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">
                 Total Students
               </span>
-              <div className="text-6xl font-semibold tracking-tighter text-primary">1,245</div>
+              <div className="text-6xl font-semibold tracking-tighter text-primary">
+                {stats.totalStudents.toLocaleString()}
+              </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-neutral-500">
               <span className="material-symbols-outlined text-sm mr-1 text-green-600">trending_up</span>
-              <span>+2.4% from last semester</span>
+              <span>Live Database Synchronization</span>
             </div>
           </div>
 
@@ -38,12 +53,12 @@ const Dashboard = () => {
                 Avg. Performance
               </span>
               <div className="text-6xl font-semibold tracking-tighter text-primary">
-                78.4<span className="text-3xl font-medium">%</span>
+                {stats.avgPerformance}<span className="text-3xl font-medium">%</span>
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-neutral-500">
               <span className="material-symbols-outlined text-sm mr-1 text-neutral-400">horizontal_rule</span>
-              <span>Stable across departments</span>
+              <span>Averaged institutional marks</span>
             </div>
           </div>
 
@@ -53,7 +68,9 @@ const Dashboard = () => {
               <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">
                 At-Risk Students
               </span>
-              <div className="text-6xl font-semibold tracking-tighter text-primary">42</div>
+              <div className="text-6xl font-semibold tracking-tighter text-primary">
+                {stats.atRiskStudents}
+              </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-error">
               <span className="material-symbols-outlined text-sm mr-1">priority_high</span>

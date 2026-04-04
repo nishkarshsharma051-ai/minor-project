@@ -14,6 +14,14 @@ export default defineConfig({
         target: 'http://localhost:5001',
         changeOrigin: true,
       },
+      '/api': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+      },
+      '/download-report': {
+        target: 'http://localhost:5001',
+        changeOrigin: true,
+      },
     },
   },
 })
