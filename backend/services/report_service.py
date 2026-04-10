@@ -93,6 +93,8 @@ def generate_pdf_report(
 
     # ── Header ────────────────────────────────────────────────────────────────
     story.append(Paragraph("Student Performance Report", _TITLE_STYLE))
+    student_name = data.get("student_name", "Anonymous Student")
+    story.append(Paragraph(f"Student: {student_name}", _SECTION_STYLE))
     story.append(Paragraph(f"Generated: {ts}", _SUBTITLE_STYLE))
     story.append(HRFlowable(width="100%", thickness=1, color=PRIMARY))
     story.append(Spacer(1, 12))
@@ -142,7 +144,7 @@ def generate_pdf_report(
     # ── Input data ────────────────────────────────────────────────────────────
     story.append(Paragraph("Input Features", _SECTION_STYLE))
     feature_rows = [["Feature", "Score"]] + [
-        [k.replace("_", " ").title(), f"{v:.1f}"] for k, v in data.items()
+        [k.replace("_", " ").title(), f"{float(v):.1f}"] for k, v in data.items() if k != "student_name"
     ]
     ft = Table(feature_rows, colWidths=[9*cm, 4*cm])
     ft.setStyle(TableStyle([
@@ -212,9 +214,14 @@ def generate_csv_report(
     """
     rows: list[dict] = []
 
-    # Section 1 – Input features
+    # Section 1 – Student Information
+    student_name = data.get("student_name", "Anonymous Student")
+    rows.append({"Section": "Student Info", "Key": "Student Name", "Value": student_name})
+
+    # Section 2 – Input features
     for k, v in data.items():
-        rows.append({"Section": "Input", "Key": k.replace("_", " ").title(), "Value": v})
+        if k != "student_name":
+            rows.append({"Section": "Input", "Key": k.replace("_", " ").title(), "Value": v})
 
     # Section 2 – Prediction
     rows.append({"Section": "Prediction", "Key": "Performance Level", "Value": prediction.capitalize()})

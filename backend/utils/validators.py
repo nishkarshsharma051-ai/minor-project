@@ -72,6 +72,10 @@ def validate_student_input(data: dict) -> Tuple[bool, Optional[str]]:
 def coerce_student_input(data: dict) -> dict:
     """
     Return a new dict with all field values coerced to Python floats.
+    Preserves optional context fields like 'student_name'.
     Call only after validate_student_input returns (True, None).
     """
-    return {field: float(data[field]) for field in REQUIRED_FIELDS}
+    coerced = {field: float(data[field]) for field in REQUIRED_FIELDS}
+    if "student_name" in data:
+        coerced["student_name"] = str(data["student_name"])
+    return coerced

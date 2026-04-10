@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const Prediction = () => {
   const [formData, setFormData] = useState({
+    student_name: '',
     marks: '',
     attendance: '',
     assignment_completion: '',
@@ -53,12 +54,13 @@ const Prediction = () => {
               </div>
               <form className="space-y-6">
                 {[
-                  { label: 'Attendance (%)', name: 'attendance' },
-                  { label: 'Marks (Prev. Sem)', name: 'marks' },
-                  { label: 'Assignment Completion (%)', name: 'assignment_completion' },
-                  { label: 'Participation (%)', name: 'participation' },
-                  { label: 'Coding Score', name: 'coding_score' },
-                  { label: 'Communication Score', name: 'communication_score' },
+                  { label: 'Student Name', name: 'student_name', type: 'text', placeholder: 'Enter student name' },
+                  { label: 'Attendance (%)', name: 'attendance', type: 'number', placeholder: '0' },
+                  { label: 'Marks (Prev. Sem)', name: 'marks', type: 'number', placeholder: '0' },
+                  { label: 'Assignment Completion (%)', name: 'assignment_completion', type: 'number', placeholder: '0' },
+                  { label: 'Participation (%)', name: 'participation', type: 'number', placeholder: '0' },
+                  { label: 'Coding Score', name: 'coding_score', type: 'number', placeholder: '0' },
+                  { label: 'Communication Score', name: 'communication_score', type: 'number', placeholder: '0' },
                 ].map((field) => (
                   <div key={field.name} className="space-y-2">
                     <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">{field.label}</label>
@@ -67,8 +69,8 @@ const Prediction = () => {
                       name={field.name}
                       value={formData[field.name]}
                       onChange={handleChange}
-                      placeholder="0"
-                      type="number"
+                      placeholder={field.placeholder}
+                      type={field.type}
                     />
                   </div>
                 ))}

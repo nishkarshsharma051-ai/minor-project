@@ -49,6 +49,8 @@ def download_report():
 
     # Build a dict from query params for validation reuse
     raw = {f: request.args.get(f) for f in FEATURE_ORDER}
+    if "student_name" in request.args:
+        raw["student_name"] = request.args.get("student_name")
 
     ok, err = validate_student_input(raw)
     if not ok:
@@ -59,18 +61,30 @@ def download_report():
     # ── Run prediction pipeline ───────────────────────────────────────────────
     model  = current_app.extensions["model"]
     X      = np.array([[data[f] for f in FEATURE_ORDER]])
-    label  = model.predict(X)[0]
+    preds  = model.predict(X)[0]
+    
+    label_perf    = preds[0]
+    label_behav   = preds[1]
+    label_dropout = preds[2]
+    label_att     = preds[3]
 
     skills   = analyze_skills(data)
-    insights = generate_insights(data, label, skills)
+    insights = generate_insights(
+        data, 
+        label_perf, 
+        skills, 
+        behavior=label_behav, 
+        dropout=label_dropout, 
+        attendance_pred=label_att
+    )
 
     # ── Generate file ─────────────────────────────────────────────────────────
     if fmt == "pdf":
-        buffer   = generate_pdf_report(data, label, skills, insights)
+        buffer   = generate_pdf_report(data, label_perf, skills, insights)
         mimetype = "application/pdf"
         filename = "student_performance_report.pdf"
     else:
-        buffer   = generate_csv_report(data, label, skills, insights)
+        buffer   = generate_csv_report(data, label_perf, skills, insights)
         mimetype = "text/csv"
         filename = "student_performance_report.csv"
 

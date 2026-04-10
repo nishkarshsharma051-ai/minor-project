@@ -119,14 +119,14 @@ const Reports = () => {
                   </td>
                   <td className="px-8 py-5 text-right">
                     <button 
-                      onClick={() => window.open(`/download-report?format=pdf&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.studyHours * 10}&participation=80&coding_score=80&communication_score=80`)}
+                      onClick={() => window.open(`/download-report?format=pdf&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.studyHours * 10}&participation=80&coding_score=80&communication_score=80`)}
                       className={`material-symbols-outlined text-sm px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
                       title="Download PDF ML Report"
                     >
                       picture_as_pdf
                     </button>
                     <button 
-                      onClick={() => window.open(`/download-report?format=csv&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.studyHours * 10}&participation=80&coding_score=80&communication_score=80`)}
+                      onClick={() => window.open(`/download-report?format=csv&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.studyHours * 10}&participation=80&coding_score=80&communication_score=80`)}
                       className={`material-symbols-outlined text-sm px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ml-1 ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
                       title="Download CSV Evaluation"
                     >
