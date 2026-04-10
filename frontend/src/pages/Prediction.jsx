@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Layout from '../components/Layout';
 import axios from 'axios';
 
@@ -15,6 +16,22 @@ const Prediction = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state) {
+      setFormData({
+        student_name:          location.state.student_name || '',
+        marks:                 location.state.marks || '',
+        attendance:            location.state.attendance || '',
+        assignment_completion: location.state.assignment_completion || '',
+        participation:         location.state.participation || '',
+        coding_score:          location.state.coding_score || '',
+        communication_score:   location.state.communication_score || '',
+      });
+    }
+  }, [location.state]);
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

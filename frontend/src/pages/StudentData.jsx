@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 
 const StudentData = () => {
@@ -7,6 +8,8 @@ const StudentData = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,6 +79,21 @@ const StudentData = () => {
       console.error("Enrollment failed:", err);
     }
   };
+
+  const handlePredictClick = (student) => {
+    navigate('/prediction', { 
+      state: { 
+        student_name: student.name,
+        marks: student.marks,
+        attendance: student.attendance,
+        assignment_completion: student.assignment_completion,
+        participation: student.participation,
+        coding_score: student.coding_score,
+        communication_score: student.communication_score
+      } 
+    });
+  };
+
 
   return (
     <Layout title="Student Directory">
@@ -162,7 +180,16 @@ const StudentData = () => {
                         <td className="px-8 py-6 text-center"><span className={`text-sm ${student.attendanceRisk ? 'font-bold text-error' : 'font-semibold'}`}>{student.attendance}%</span></td>
                         <td className="px-8 py-6 text-center"><span className="text-sm">{student.marks}</span></td>
                         <td className="px-8 py-6 text-center"><span className="text-sm">{student.studyHours}</span></td>
-                        <td className="px-8 py-6 text-right"><button className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">more_horiz</button></td>
+                        <td className="px-8 py-6 text-right">
+                          <button 
+                            onClick={() => handlePredictClick(student)}
+                            className="material-symbols-outlined text-neutral-400 hover:text-primary transition-colors"
+                            title="Predict metrics for this student"
+                          >
+                            insights
+                          </button>
+                        </td>
+
                       </tr>
                     ))
                   )}
