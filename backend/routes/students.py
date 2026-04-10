@@ -2,6 +2,7 @@ import math
 from flask import Blueprint, jsonify, request
 from models.student_model import Student, db
 from sqlalchemy import func
+from services.insight_service import generate_institutional_insights
 
 students_bp = Blueprint("students", __name__)
 
@@ -61,9 +62,12 @@ def enroll_student():
     last_name = data.get("lastName", "").strip()
     
     try:
-        marks = float(data.get("marks", 0.0))
-        attendance = float(data.get("attendance", 0.0))
-        assignment = float(data.get("assignmentCompletion", 0.0))
+        marks         = float(data.get("marks", 0.0))
+        attendance    = float(data.get("attendance", 0.0))
+        assignment    = float(data.get("assignmentCompletion", 0.0))
+        participation = float(data.get("participation", 0.0))
+        coding        = float(data.get("coding_score", 0.0))
+        communication = float(data.get("communication_score", 0.0))
     except ValueError:
         return jsonify({"error": "Numerical fields must be valid numbers"}), 400
     
@@ -89,6 +93,9 @@ def enroll_student():
         attendance=attendance,
         assignment_completion=assignment,
         study_hours=study_hours,
+        participation=participation,
+        coding_score=coding,
+        communication_score=communication,
         attendance_risk=attendance_risk,
         dropout_risk=dropout_risk
     )
@@ -98,7 +105,8 @@ def enroll_student():
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        return jsonify({"error": "Failed to safely write to database"}), 500
+        return jsonify({"error": f"Failed to safely write to database: {str(e)}"}), 500
+
     
     return jsonify({"message": "Student enrolled successfully", "student": new_student.to_dict()}), 201
 
@@ -122,15 +130,35 @@ def get_analytics():
     scatter_query = Student.query.order_by(func.random()).limit(200).all()
     scatter_points = [{"x": float(s.study_hours or 0), "y": float(s.marks or 0)} for s in scatter_query]
     
-    return jsonify({
+    # Attendance bins: 60-70, 70-80, 80-90, 90-100
+    # Calculate average marks for each attendance bracket
+    bins = [(60, 70), (70, 80), (80, 90), (90, 100)]
+    correlation_data = []
+    for low, high in bins:
+        avg_bin_marks = db.session.query(func.avg(Student.marks)).filter(
+            Student.attendance >= low,
+            Student.attendance < high
+        ).scalar() or 0.0
+        correlation_data.append(round(float(avg_bin_marks), 1))
+    
+    metrics = {
         "institutionalPerformance": round(float(avg_marks), 1),
         "avgAttendance": round(float(avg_attendance), 1),
-        "retentionRate": round((retained_count / total_students) * 100, 1),
+        "retentionRate": round((retained_count / total_students) * 100, 1) if total_students > 0 else 0.0,
+    }
+    
+    insights = generate_institutional_insights(metrics)
+    
+    return jsonify({
+        **metrics,
         "passVsFail": {
             "passing": passing_count,
             "failing": failing_count,
-            "passingPercentage": round((passing_count / total_students) * 100, 1)
+            "passingPercentage": round((passing_count / total_students) * 100, 1) if total_students > 0 else 0.0
         },
-        "scatterPoints": scatter_points
+        "scatterPoints": scatter_points,
+        "correlationData": correlation_data,
+        "insights": insights
     })
+
 

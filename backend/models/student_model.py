@@ -11,10 +11,13 @@ class Student(db.Model):
     initials = db.Column(db.String(5), nullable=False)
     
     # Metrics
-    marks = db.Column(db.Float, default=0.0)
-    attendance = db.Column(db.Float, default=0.0)
+    marks                 = db.Column(db.Float, default=0.0)
+    attendance            = db.Column(db.Float, default=0.0)
     assignment_completion = db.Column(db.Float, default=0.0)
-    study_hours = db.Column(db.Float, default=0.0)
+    study_hours           = db.Column(db.Float, default=0.0)
+    participation         = db.Column(db.Float, default=0.0)
+    coding_score          = db.Column(db.Float, default=0.0)
+    communication_score   = db.Column(db.Float, default=0.0)
     
     # Enums / Labels
     attendance_risk = db.Column(db.Boolean, default=False)
@@ -29,9 +32,15 @@ class Student(db.Model):
             "id": self.id,
             "name": self.display_name,
             "initials": self.initials,
-            "attendance": round(float(self.attendance), 1) if self.attendance is not None else 0.0,
-            "marks": round(float(self.marks), 1) if self.marks is not None else 0.0,
-            "studyHours": round(float(self.study_hours), 1) if self.study_hours is not None else 0.0,
+            "attendance": round(float(self.attendance or 0), 1),
+            "marks": round(float(self.marks or 0), 1),
+            "studyHours": round(float(self.study_hours or 0), 1),
+            "assignment_completion": round(float(self.assignment_completion or 0), 1),
+            "participation": round(float(self.participation or 0), 1),
+            "coding_score": round(float(self.coding_score or 0), 1),
+            "communication_score": round(float(self.communication_score or 0), 1),
             "attendanceRisk": self.attendance_risk,
             "dropoutRisk": self.dropout_risk
+
         }
+

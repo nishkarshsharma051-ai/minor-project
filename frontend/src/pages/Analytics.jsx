@@ -7,8 +7,11 @@ const Analytics = () => {
     avgAttendance: 0,
     retentionRate: 0,
     passVsFail: { passingPercentage: 0 },
-    scatterPoints: []
+    scatterPoints: [],
+    correlationData: [0, 0, 0, 0],
+    insights: { summary: '', focus_areas: [] }
   });
+  const [showInsight, setShowInsight] = useState(false);
 
   useEffect(() => {
     fetch('/api/analytics')
@@ -61,31 +64,22 @@ const Analytics = () => {
           </div>
           
           <div className="flex-1 flex items-end gap-4 px-4 pb-4">
-            <div className="flex-1 flex flex-col items-center gap-3">
-              <div className="w-full bg-neutral-100 rounded-t-lg relative group h-48">
-                <div className="absolute bottom-0 w-full bg-primary rounded-t-lg transition-all duration-500 h-[60%]"></div>
+            {['60-70%', '70-80%', '80-90%', '90-100%'].map((label, idx) => (
+              <div key={label} className="flex-1 flex flex-col items-center gap-3">
+                <div className="w-full bg-neutral-100 rounded-t-lg relative group h-48">
+                  <div 
+                    className="absolute bottom-0 w-full bg-primary rounded-t-lg transition-all duration-500"
+                    style={{ height: `${data.correlationData[idx] || 0}%` }}
+                  ></div>
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Avg Marks: {data.correlationData[idx]}%
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">{label}</span>
               </div>
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">60-70%</span>
-            </div>
-            <div className="flex-1 flex flex-col items-center gap-3">
-              <div className="w-full bg-neutral-100 rounded-t-lg relative group h-48">
-                <div className="absolute bottom-0 w-full bg-neutral-800 rounded-t-lg transition-all duration-500 h-[75%]"></div>
-              </div>
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">70-80%</span>
-            </div>
-            <div className="flex-1 flex flex-col items-center gap-3">
-              <div className="w-full bg-neutral-100 rounded-t-lg relative group h-48">
-                <div className="absolute bottom-0 w-full bg-neutral-600 rounded-t-lg transition-all duration-500 h-[88%]"></div>
-              </div>
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">80-90%</span>
-            </div>
-            <div className="flex-1 flex flex-col items-center gap-3">
-              <div className="w-full bg-neutral-100 rounded-t-lg relative group h-48">
-                <div className="absolute bottom-0 w-full bg-neutral-400 rounded-t-lg transition-all duration-500 h-[95%]"></div>
-              </div>
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-tighter">90-100%</span>
-            </div>
+            ))}
           </div>
+
         </div>
 
         {/* Chart 2: Pie Chart (Pass vs Fail) */}
@@ -176,13 +170,60 @@ const Analytics = () => {
         </div>
       </footer>
 
-      {/* Contextual Insight (FAB-like alternative for Analytics) */}
+      {/* Contextual Insight Overlay */}
+      {showInsight && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">auto_awesome</span>
+                  <h3 className="text-xl font-bold">Institutional AI Summary</h3>
+                </div>
+                <button onClick={() => setShowInsight(false)} className="text-neutral-400 hover:text-black">
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm text-on-surface-variant leading-relaxed mb-4">
+                    {data.insights.summary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-3">Key Focus Areas</h4>
+                  <div className="space-y-2">
+                    {data.insights.focus_areas.map((area, i) => (
+                      <div key={i} className="flex gap-3 p-3 bg-surface-container-low rounded-lg items-start border-l-4 border-primary">
+                        <span className="material-symbols-outlined text-sm mt-0.5 text-primary">priority_high</span>
+                        <p className="text-xs font-medium text-on-surface">{area}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="pt-4 border-t border-surface-container-low flex justify-between items-center">
+                  <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">Refreshed {data.insights.timestamp}</span>
+                  <button onClick={() => setShowInsight(false)} className="bg-black text-white px-4 py-2 rounded-lg text-xs font-bold transition-transform active:scale-95">Dismiss</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contextual Insight Button */}
       <div className="fixed bottom-8 right-8 z-50">
-        <button className="flex items-center gap-2 bg-black text-white px-6 py-4 rounded-full shadow-2xl hover:scale-[1.02] transition-transform active:scale-95">
-          <span className="material-symbols-outlined">auto_awesome</span>
+        <button 
+          onClick={() => setShowInsight(true)}
+          className="flex items-center gap-2 bg-black text-white px-6 py-4 rounded-full shadow-2xl hover:scale-[1.05] transition-all active:scale-95 group">
+          <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">auto_awesome</span>
           <span className="text-sm font-semibold">Generate AI Insight</span>
         </button>
       </div>
+
     </Layout>
   );
 };

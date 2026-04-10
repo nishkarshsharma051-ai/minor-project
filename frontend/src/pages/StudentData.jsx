@@ -15,7 +15,10 @@ const StudentData = () => {
     lastName: '',
     marks: '',
     attendance: '',
-    assignmentCompletion: ''
+    assignmentCompletion: '',
+    participation: '',
+    coding_score: '',
+    communication_score: ''
   });
 
   const limit = 5;
@@ -60,10 +63,15 @@ const StudentData = () => {
       });
       if (res.ok) {
         setIsModalOpen(false);
-        setEnrollForm({ firstName: '', lastName: '', marks: '', attendance: '', assignmentCompletion: '' });
+        setEnrollForm({ 
+          firstName: '', lastName: '', marks: '', attendance: '', 
+          assignmentCompletion: '', participation: '', 
+          coding_score: '', communication_score: '' 
+        });
         fetchSummary();
         fetchStudents();
       }
+
     } catch (err) {
       console.error("Enrollment failed:", err);
     }
@@ -228,12 +236,35 @@ const StudentData = () => {
                     value={enrollForm.attendance} onChange={e => setEnrollForm({...enrollForm, attendance: e.target.value})} />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wider">Assignment Comp. (%)</label>
-                <input type="number" step="0.1" required
-                  className="w-full px-4 py-2 rounded-lg bg-surface-container border border-outline-variant/30 focus:border-primary focus:outline-none transition-colors"
-                  value={enrollForm.assignmentCompletion} onChange={e => setEnrollForm({...enrollForm, assignmentCompletion: e.target.value})} />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wider">Assignment (%)</label>
+                  <input type="number" step="0.1" required
+                    className="w-full px-4 py-2 rounded-lg bg-surface-container border border-outline-variant/30 focus:border-primary focus:outline-none transition-colors"
+                    value={enrollForm.assignmentCompletion} onChange={e => setEnrollForm({...enrollForm, assignmentCompletion: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wider">Participation (%)</label>
+                  <input type="number" step="0.1" required
+                    className="w-full px-4 py-2 rounded-lg bg-surface-container border border-outline-variant/30 focus:border-primary focus:outline-none transition-colors"
+                    value={enrollForm.participation} onChange={e => setEnrollForm({...enrollForm, participation: e.target.value})} />
+                </div>
               </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wider">Coding Score</label>
+                  <input type="number" step="0.1" required
+                    className="w-full px-4 py-2 rounded-lg bg-surface-container border border-outline-variant/30 focus:border-primary focus:outline-none transition-colors"
+                    value={enrollForm.coding_score} onChange={e => setEnrollForm({...enrollForm, coding_score: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wider">Comm. Score</label>
+                  <input type="number" step="0.1" required
+                    className="w-full px-4 py-2 rounded-lg bg-surface-container border border-outline-variant/30 focus:border-primary focus:outline-none transition-colors"
+                    value={enrollForm.communication_score} onChange={e => setEnrollForm({...enrollForm, communication_score: e.target.value})} />
+                </div>
+              </div>
+
               <button type="submit" className="w-full mt-6 data-monolith-gradient py-3 rounded-xl text-on-primary font-semibold hover:shadow-lg transition-transform active:scale-95">
                 Complete Enrollment
               </button>

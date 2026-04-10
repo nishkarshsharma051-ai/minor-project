@@ -55,11 +55,15 @@ def seed():
                 initials=f"{first_name[0]}{last_name[0]}",
                 marks=float(row.get("marks", 0)),
                 attendance=float(row.get("attendance", 0)),
-                assignment_completion=assignment,
+                assignment_completion=float(row.get("assignment_completion", 0)),
                 study_hours=study_hours,
+                participation=float(row.get("participation", 0)),
+                coding_score=float(row.get("coding_score", 0)),
+                communication_score=float(row.get("communication_score", 0)),
                 attendance_risk=float(row.get("attendance", 0)) < 75.0,
                 dropout_risk=row.get("dropout_risk", "low")
             )
+
 
         print(f"Building {len(df)} database records locally...")
         students_to_insert = []

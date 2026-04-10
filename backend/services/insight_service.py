@@ -13,6 +13,7 @@ Why rule-based and not another ML model?
 from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Literal
+from datetime import datetime
 
 # ── Thresholds (single source of truth) ──────────────────────────────────────
 WEAK_THRESHOLD   = 50.0   # below this = needs attention
@@ -123,3 +124,38 @@ def generate_insights(
         suggestions = suggestions,
         strengths   = strengths,
     ))
+
+
+def generate_institutional_insights(metrics: dict) -> dict:
+    """
+    Generate a summary of institutional health based on aggregate metrics.
+    """
+    perf = metrics.get("institutionalPerformance", 0)
+    att = metrics.get("avgAttendance", 0)
+    ret = metrics.get("retentionRate", 0)
+    
+    summary = f"Overall institutional performance is at {perf}%. "
+    if perf >= 80:
+        summary += "The cohort is exhibiting exceptional academic proficiency and engagement."
+    elif perf >= 60:
+        summary += "Performance is currently stable, maintaining a baseline of consistent learning outcomes."
+    else:
+        summary += "⚠️  Alert: Performance metrics have dipped below the target threshold. Immediate review of curriculum delivery is advised."
+        
+    focus_areas = []
+    if att < 75:
+        focus_areas.append("Low attendance levels detected: Implement outreach for disengaged students.")
+    if ret < 90:
+        focus_areas.append("Retention trends are fluctuating: Strengthening student support and counseling is recommended.")
+    if perf < 60:
+        focus_areas.append("Academic performance bottleneck: Consider introducing peer-assisted learning sessions.")
+        
+    if not focus_areas:
+        focus_areas.append("Stable trajectory: Maintain current standards while diversifying elective offerings.")
+        
+    return {
+        "summary":     summary,
+        "focus_areas": focus_areas,
+        "timestamp":   datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    }
+
