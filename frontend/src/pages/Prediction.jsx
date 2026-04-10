@@ -16,7 +16,25 @@ const Prediction = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [enrolledStudents, setEnrolledStudents] = useState([]);
+  const [isFetchingStudents, setIsFetchingStudents] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    // Fetch students for quick-selection
+    const fetchStudents = async () => {
+      setIsFetchingStudents(true);
+      try {
+        const response = await axios.get('/api/students?limit=100');
+        setEnrolledStudents(response.data.students || []);
+      } catch (err) {
+        console.error("Failed to fetch students for lookup:", err);
+      } finally {
+        setIsFetchingStudents(false);
+      }
+    };
+    fetchStudents();
+  }, []);
 
   useEffect(() => {
     if (location.state) {
@@ -65,10 +83,46 @@ const Prediction = () => {
           {/* Left Column: Input Form */}
           <div className="col-span-12 lg:col-span-5 space-y-8">
             <div className="bg-surface-container-lowest p-10 rounded-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.04)]">
+              <div className="mb-8 p-4 bg-surface-container rounded-lg border border-outline-variant/30">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">Quick Load</span>
+                <div className="relative">
+                  <select 
+                    onChange={(e) => {
+                      const student = enrolledStudents.find(s => s.id === parseInt(e.target.value));
+                      if (student) {
+                        setFormData({
+                          student_name: student.name,
+                          marks: student.marks,
+                          attendance: student.attendance,
+                          assignment_completion: student.assignment_completion,
+                          participation: student.participation,
+                          coding_score: student.coding_score,
+                          communication_score: student.communication_score
+                        });
+                      }
+                    }}
+                    className="w-full bg-white border border-outline-variant/30 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
+                    defaultValue=""
+                  >
+                    <option value="" disabled>{isFetchingStudents ? 'Loading Students...' : 'Select Enrolled Student'}</option>
+                    {enrolledStudents.map(student => (
+                      <option key={student.id} value={student.id}>
+                        {student.name} (ID: {student.id})
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <span className="material-symbols-outlined text-sm text-on-surface-variant">expand_more</span>
+                  </div>
+                </div>
+                <p className="text-[10px] text-on-surface-variant mt-2 italic">Select a student from the directory to auto-fill metrics.</p>
+              </div>
+
               <div className="mb-8">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">Configuration</span>
                 <h3 className="text-xl font-semibold">Model Parameters</h3>
               </div>
+
               <form className="space-y-6">
                 {[
                   { label: 'Student Name', name: 'student_name', type: 'text', placeholder: 'Enter student name' },
