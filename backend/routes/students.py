@@ -55,8 +55,27 @@ def get_dashboard_summary():
         "atRiskStudents": at_risk_students
     })
 
+@students_bp.route("/api/students/<int:student_id>", methods=["DELETE"])
+def delete_student(student_id):
+    print(f"DEBUG: Attempting to delete student with ID {student_id}")
+    student = Student.query.get(student_id)
+    if not student:
+        print(f"DEBUG: Student {student_id} not found")
+        return jsonify({"error": "Student record not found in database"}), 404
+    try:
+        db.session.delete(student)
+        db.session.commit()
+        print(f"DEBUG: Successfully deleted student {student_id}")
+        return jsonify({"message": "Student deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"DEBUG: Deletion error: {str(e)}")
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+
 @students_bp.route("/api/students", methods=["POST"])
 def enroll_student():
+
     data = request.json
     first_name = data.get("firstName", "").strip()
     last_name = data.get("lastName", "").strip()
@@ -160,5 +179,50 @@ def get_analytics():
         "correlationData": correlation_data,
         "insights": insights
     })
+
+
+@students_bp.route("/api/dashboard/details", methods=["GET"])
+def get_dashboard_details():
+    """
+    Returns specific alerts and performance distribution for the dashboard.
+    """
+    total_students = Student.query.count()
+    if total_students == 0:
+        return jsonify({"alerts": [], "distribution": [0,0,0,0,0]})
+
+    # 1. Real-time alerts based on actual student metrics
+    at_risk = Student.query.filter((Student.attendance < 75) | (Student.marks < 40)).limit(10).all()
+    alerts = []
+    for s in at_risk:
+        if s.attendance < 75:
+            alerts.append({
+                "type": "warning",
+                "title": "Attendance Drop",
+                "content": f"{s.display_name} has dropped below target attendance ({round(s.attendance, 1)}%)"
+            })
+        elif s.marks < 40:
+             alerts.append({
+                "type": "error",
+                "title": "Performance Risk",
+                "content": f"{s.display_name} is below pass threshold ({round(s.marks, 1)} marks)"
+            })
+            
+    # 2. Performance Distribution (Marks 0-100 in 5 buckets)
+    distribution = [0] * 5
+    students = Student.query.all()
+    for s in students:
+        # bucket: 0-20, 20-40, 40-60, 60-80, 80-100
+        bucket_idx = min(int((s.marks or 0) // 20), 4)
+        distribution[bucket_idx] += 1
+        
+    return jsonify({
+        "alerts": alerts[:4] if alerts else [{
+            "type": "info",
+            "title": "All Clear",
+            "content": "No critical attendance or performance alerts detected."
+        }],
+        "distribution": distribution
+    })
+
 
 

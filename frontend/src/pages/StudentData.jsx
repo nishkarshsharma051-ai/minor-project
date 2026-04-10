@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import axios from 'axios';
+
 
 const StudentData = () => {
   const [students, setStudents] = useState([]);
@@ -94,6 +96,26 @@ const StudentData = () => {
     });
   };
 
+  const handleDeleteStudent = async (id, name) => {
+    if (window.confirm(`Are you sure you want to delete ${name}? This action cannot be undone.`)) {
+      try {
+        const res = await fetch(`/api/students/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          fetchSummary();
+          fetchStudents();
+        } else {
+          const data = await res.json();
+          alert(`Failed to delete student: ${data.error || "Server error"}`);
+        }
+      } catch (err) {
+        console.error("Deletion failed:", err);
+        alert(`Failed to delete student: ${err.message}`);
+      }
+    }
+  };
+
+
+
 
   return (
     <Layout title="Student Directory">
@@ -124,16 +146,18 @@ const StudentData = () => {
           <div className="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between h-48">
             <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Total Students</span>
             <div className="mt-4">
-              <span className="text-6xl font-semibold tracking-tighter">{summary.totalStudents.toLocaleString()}</span>
+              <span className="text-6xl font-semibold tracking-tighter">{(summary?.totalStudents || 0).toLocaleString()}</span>
             </div>
+
           </div>
         </div>
         <div className="col-span-12 lg:col-span-3">
           <div className="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between h-48">
             <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Avg Attendance</span>
             <div className="mt-4">
-              <span className="text-6xl font-semibold tracking-tighter">{summary.avgAttendance}%</span>
+              <span className="text-6xl font-semibold tracking-tighter">{summary?.avgAttendance || 0}%</span>
             </div>
+
           </div>
         </div>
         <div className="col-span-12 lg:col-span-6">
@@ -180,7 +204,7 @@ const StudentData = () => {
                         <td className="px-8 py-6 text-center"><span className={`text-sm ${student.attendanceRisk ? 'font-bold text-error' : 'font-semibold'}`}>{student.attendance}%</span></td>
                         <td className="px-8 py-6 text-center"><span className="text-sm">{student.marks}</span></td>
                         <td className="px-8 py-6 text-center"><span className="text-sm">{student.studyHours}</span></td>
-                        <td className="px-8 py-6 text-right">
+                        <td className="px-8 py-6 text-right flex justify-end gap-2">
                           <button 
                             onClick={() => handlePredictClick(student)}
                             className="material-symbols-outlined text-neutral-400 hover:text-primary transition-colors"
@@ -188,7 +212,15 @@ const StudentData = () => {
                           >
                             insights
                           </button>
+                          <button 
+                            onClick={() => handleDeleteStudent(student.id, student.name)}
+                            className="material-symbols-outlined text-neutral-400 hover:text-error transition-colors"
+                            title="Delete this student"
+                          >
+                            delete
+                          </button>
                         </td>
+
 
                       </tr>
                     ))
@@ -200,8 +232,9 @@ const StudentData = () => {
             {/* Minimalist Pagination */}
             <div className="px-8 py-6 bg-white border-t border-surface-container-low flex justify-between items-center">
               <span className="text-xs text-on-surface-variant font-medium">
-                Showing {students.length} of {summary.totalStudents.toLocaleString()} students
+                Showing {students?.length || 0} of {(summary?.totalStudents || 0).toLocaleString()} students
               </span>
+
               <div className="flex space-x-2">
                 <button 
                   onClick={() => setPage(p => Math.max(1, p - 1))}
@@ -292,7 +325,7 @@ const StudentData = () => {
                 </div>
               </div>
 
-              <button type="submit" className="w-full mt-6 data-monolith-gradient py-3 rounded-xl text-on-primary font-semibold hover:shadow-lg transition-transform active:scale-95">
+              <button type="submit" className="w-full mt-6 data-monolith-gradient py-3 rounded-xl text-white font-semibold hover:shadow-lg transition-transform active:scale-95">
                 Complete Enrollment
               </button>
             </form>

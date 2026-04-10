@@ -21,20 +21,22 @@ const Prediction = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Fetch students for quick-selection
-    const fetchStudents = async () => {
-      setIsFetchingStudents(true);
-      try {
-        const response = await axios.get('/api/students?limit=100');
-        setEnrolledStudents(response.data.students || []);
-      } catch (err) {
-        console.error("Failed to fetch students for lookup:", err);
-      } finally {
-        setIsFetchingStudents(false);
-      }
-    };
     fetchStudents();
   }, []);
+
+  const fetchStudents = async () => {
+    setIsFetchingStudents(true);
+    try {
+      const response = await axios.get('/api/students?limit=100');
+      setEnrolledStudents(response.data.students || []);
+    } catch (err) {
+      console.error("Failed to fetch students for lookup:", err);
+      setError("Note: Could not load enrolled students list. Use manual entry or refresh.");
+    } finally {
+      setIsFetchingStudents(false);
+    }
+  };
+
 
   useEffect(() => {
     if (location.state) {
@@ -84,7 +86,16 @@ const Prediction = () => {
           <div className="col-span-12 lg:col-span-5 space-y-8">
             <div className="bg-surface-container-lowest p-10 rounded-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.04)]">
               <div className="mb-8 p-4 bg-surface-container rounded-lg border border-outline-variant/30">
-                <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">Quick Load</span>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">Quick Load</span>
+                  <button 
+                    onClick={fetchStudents}
+                    className="text-[10px] flex items-center gap-1 font-bold text-primary hover:text-neutral-800 transition-colors uppercase tracking-widest"
+                  >
+                    <span className={`material-symbols-outlined text-[14px] ${isFetchingStudents ? 'animate-spin' : ''}`}>refresh</span>
+                    Refresh List
+                  </button>
+                </div>
                 <div className="relative">
                   <select 
                     onChange={(e) => {
@@ -104,10 +115,10 @@ const Prediction = () => {
                     className="w-full bg-white border border-outline-variant/30 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-primary appearance-none cursor-pointer"
                     defaultValue=""
                   >
-                    <option value="" disabled>{isFetchingStudents ? 'Loading Students...' : 'Select Enrolled Student'}</option>
+                    <option value="" disabled>{isFetchingStudents ? 'Loading...' : (enrolledStudents.length === 0 ? 'No Enrolled Students Found' : 'Select Enrolled Student')}</option>
                     {enrolledStudents.map(student => (
                       <option key={student.id} value={student.id}>
-                        {student.name} (ID: {student.id})
+                        {student.name}
                       </option>
                     ))}
                   </select>
@@ -115,8 +126,11 @@ const Prediction = () => {
                     <span className="material-symbols-outlined text-sm text-on-surface-variant">expand_more</span>
                   </div>
                 </div>
-                <p className="text-[10px] text-on-surface-variant mt-2 italic">Select a student from the directory to auto-fill metrics.</p>
+                {enrolledStudents.length === 0 && !isFetchingStudents && (
+                  <p className="text-[10px] text-error mt-2">Zero students found in database. Go to Student Data to enroll someone.</p>
+                )}
               </div>
+
 
               <div className="mb-8">
                 <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">Configuration</span>

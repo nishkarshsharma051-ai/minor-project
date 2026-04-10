@@ -8,12 +8,20 @@ const Dashboard = () => {
     atRiskStudents: 0
   });
 
+  const [details, setDetails] = useState({ alerts: [], distribution: [0,0,0,0,0] });
+
   useEffect(() => {
     fetch('/api/dashboard/summary')
       .then(res => res.json())
       .then(data => setStats(data))
       .catch(err => console.error("Failed to fetch dashboard stats", err));
+
+    fetch('/api/dashboard/details')
+      .then(res => res.json())
+      .then(data => setDetails(data))
+      .catch(err => console.error("Failed to fetch dashboard details", err));
   }, []);
+
 
   return (
     <Layout title="Dashboard">
@@ -86,32 +94,44 @@ const Dashboard = () => {
             <div className="flex justify-between items-end mb-8">
               <div>
                 <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">
-                  Performance Trend
+                  Performance Distribution
                 </span>
-                <h3 className="text-xl font-semibold">Institutional Growth</h3>
+                <h3 className="text-xl font-semibold">Cohort Mastery</h3>
               </div>
               <div className="flex gap-2">
-                <span className="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-bold">WEEKLY</span>
-                <span className="px-3 py-1 bg-primary text-on-primary rounded-full text-[10px] font-bold">MONTHLY</span>
+                <span className="px-3 py-1 bg-primary text-on-primary rounded-full text-[10px] font-bold tracking-widest">LIVE DATA</span>
               </div>
             </div>
-            <div className="h-64 w-full relative">
-              <svg className="w-full h-full" viewBox="0 0 800 200">
-                <path d="M0,180 Q100,160 200,120 T400,100 T600,60 T800,40" fill="none" stroke="black" strokeWidth="3"></path>
-                <path d="M0,190 Q100,180 200,160 T400,150 T600,130 T800,120" fill="none" stroke="#c6c6c6" strokeDasharray="8 4" strokeWidth="2"></path>
-                <circle cx="200" cy="120" fill="black" r="4"></circle>
-                <circle cx="400" cy="100" fill="black" r="4"></circle>
-                <circle cx="600" cy="60" fill="black" r="4"></circle>
-              </svg>
-              <div className="absolute bottom-0 w-full flex justify-between text-[10px] font-bold text-neutral-400 mt-4 px-2">
-                <span>SEP</span>
-                <span>OCT</span>
-                <span>NOV</span>
-                <span>DEC</span>
-                <span>JAN</span>
-                <span>FEB</span>
-              </div>
+            <div className="h-64 w-full flex items-end gap-2 px-4">
+              {['0-20', '21-40', '41-60', '61-80', '81-100'].map((label, idx) => {
+                const count = details?.distribution?.[idx] || 0;
+                const maxCount = Math.max(...(details?.distribution || [1]), 1);
+                const heightPercent = (count / maxCount) * 100;
+
+                return (
+                  <div key={label} className="flex-1 flex flex-col items-center gap-2 group relative">
+                    <div className="w-full bg-neutral-100 rounded-t-lg relative h-48 flex items-end overflow-hidden">
+                      <div 
+                        className="w-full bg-primary/10 group-hover:bg-primary/20 transition-all duration-500 absolute bottom-0 left-0 right-0"
+                        style={{ height: '100%' }}
+                      ></div>
+                      <div 
+                        className="w-full bg-primary rounded-t-sm transition-all duration-700 relative z-10"
+                        style={{ height: `${heightPercent}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">{label}</span>
+                    
+                    {/* Tooltip */}
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                      {count} Students
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+
+
           </div>
 
           {/* Critical Alerts */}
@@ -120,30 +140,31 @@ const Dashboard = () => {
               Critical Alerts
             </span>
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error">
-                  <span className="material-symbols-outlined text-sm">warning</span>
+              {(details?.alerts || []).map((alert, idx) => (
+                <div key={idx} className="flex items-start gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    alert?.type === 'error' ? 'bg-error-container text-error' : 
+                    alert?.type === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
+                  }`}>
+                    <span className="material-symbols-outlined text-sm">
+                      {alert?.type === 'error' ? 'warning' : alert?.type === 'warning' ? 'report' : 'info'}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold">{alert?.title || 'System Alert'}</p>
+                    <p className="text-xs text-neutral-500">{alert?.content || 'Status Check'}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold">Attendance Drop</p>
-                  <p className="text-xs text-neutral-500">Year 3 Engineering decreased by 15%</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-sm">task_alt</span>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">Reports Generated</p>
-                  <p className="text-xs text-neutral-500">Quarterly performance audit ready</p>
-                </div>
-              </div>
+              ))}
+
+              
               <div className="pt-6">
-                <button className="w-full data-monolith-gradient text-on-primary py-3 rounded-lg text-sm font-medium transition-transform active:scale-95 shadow-md">
+                <a href="/analytics" className="block w-full data-monolith-gradient text-center text-white py-3 rounded-lg text-sm font-medium transition-transform active:scale-95 shadow-md">
                   View Detailed Analytics
-                </button>
+                </a>
               </div>
             </div>
+
           </div>
         </div>
       </div>
