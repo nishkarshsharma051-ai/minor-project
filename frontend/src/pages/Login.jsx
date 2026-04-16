@@ -43,7 +43,7 @@ const Login = () => {
               </label>
               <div className="relative group">
                 <input
-                  className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant"
+                  className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
                   type="email"
                   placeholder="user@example.com"
                   value={email}
@@ -65,7 +65,7 @@ const Login = () => {
               </div>
               <div className="relative group">
                 <input
-                  className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant"
+                  className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
                   type="password"
                   placeholder="••••••••"
                   value={password}

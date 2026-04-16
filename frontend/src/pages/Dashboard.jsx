@@ -1,25 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import axios from 'axios';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalStudents: 0,
     avgPerformance: 0,
-    atRiskStudents: 0
+    atRiskStudents: 0,
+    performanceTrend: 'up',
+    trendValue: '0'
   });
 
   const [details, setDetails] = useState({ alerts: [], distribution: [0,0,0,0,0] });
 
   useEffect(() => {
-    fetch('/api/dashboard/summary')
-      .then(res => res.json())
-      .then(data => setStats(data))
+    axios.get('/api/dashboard/summary')
+      .then(res => setStats(prev => ({ ...prev, ...res.data })))
       .catch(err => console.error("Failed to fetch dashboard stats", err));
 
-    fetch('/api/dashboard/details')
-      .then(res => res.json())
-      .then(data => setDetails(data))
+    axios.get('/api/dashboard/details')
+      .then(res => setDetails(res.data))
       .catch(err => console.error("Failed to fetch dashboard details", err));
+
+    axios.get('/api/analytics').then(res => {
+      const trend = res.data.performanceTrend;
+      if (trend && trend.length >= 2) {
+        const last = trend[trend.length - 1].score;
+        const prev = trend[trend.length - 2].score;
+        setStats(prevStats => ({ 
+          ...prevStats, 
+          performanceTrend: last >= prev ? 'up' : 'down',
+          trendValue: Math.abs(last - prev).toFixed(1)
+        }));
+      }
+    });
   }, []);
 
 
@@ -45,12 +59,17 @@ const Dashboard = () => {
                 Total Students
               </span>
               <div className="text-6xl font-semibold tracking-tighter text-primary">
-                {stats.totalStudents.toLocaleString()}
+                {(stats?.totalStudents || 0).toLocaleString()}
               </div>
             </div>
-            <div className="mt-6 flex items-center text-xs text-neutral-500">
-              <span className="material-symbols-outlined text-sm mr-1 text-green-600">trending_up</span>
-              <span>Live Database Synchronization</span>
+            <div className="mt-6 flex items-center text-xs">
+              <span className={`material-symbols-outlined text-sm mr-1 ${stats?.performanceTrend === 'up' ? 'text-green-600' : 'text-red-500'}`}>
+                {stats?.performanceTrend === 'up' ? 'trending_up' : 'trending_down'}
+              </span>
+              <span className={`font-bold mr-1 ${stats?.performanceTrend === 'up' ? 'text-green-600' : 'text-red-500'}`}>
+                {stats?.performanceTrend === 'up' ? '+' : '-'}{stats?.trendValue || 0}%
+              </span>
+              <span className="text-neutral-400">vs last month</span>
             </div>
           </div>
 
@@ -61,7 +80,7 @@ const Dashboard = () => {
                 Avg. Performance
               </span>
               <div className="text-6xl font-semibold tracking-tighter text-primary">
-                {stats.avgPerformance}<span className="text-3xl font-medium">%</span>
+                {stats?.avgPerformance || 0}<span className="text-3xl font-medium">%</span>
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-neutral-500">
@@ -77,7 +96,7 @@ const Dashboard = () => {
                 At-Risk Students
               </span>
               <div className="text-6xl font-semibold tracking-tighter text-primary">
-                {stats.atRiskStudents}
+                {stats?.atRiskStudents || 0}
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-error">
@@ -105,7 +124,8 @@ const Dashboard = () => {
             <div className="h-64 w-full flex items-end gap-2 px-4">
               {['0-20', '21-40', '41-60', '61-80', '81-100'].map((label, idx) => {
                 const count = details?.distribution?.[idx] || 0;
-                const maxCount = Math.max(...(details?.distribution || [1]), 1);
+                const distArray = Array.isArray(details?.distribution) ? details.distribution : [0,0,0,0,0];
+                const maxCount = Math.max(...distArray, 1);
                 const heightPercent = (count / maxCount) * 100;
 
                 return (

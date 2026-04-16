@@ -28,7 +28,7 @@ const Prediction = () => {
     setIsFetchingStudents(true);
     try {
       const response = await axios.get('/api/students?limit=100');
-      setEnrolledStudents(response.data.students || []);
+      setEnrolledStudents(response.data?.data || []);
     } catch (err) {
       console.error("Failed to fetch students for lookup:", err);
       setError("Note: Could not load enrolled students list. Use manual entry or refresh.");
@@ -150,7 +150,7 @@ const Prediction = () => {
                   <div key={field.name} className="space-y-2">
                     <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider">{field.label}</label>
                     <input
-                      className="w-full bg-surface-container-low border-b-2 border-transparent focus:border-primary focus:ring-0 transition-all px-0 py-2 text-lg font-medium"
+                      className="w-full bg-surface-container-low border-b-2 border-transparent focus:border-primary focus:ring-0 transition-all px-0 py-2 text-lg font-medium text-black"
                       name={field.name}
                       value={formData[field.name]}
                       onChange={handleChange}
@@ -207,13 +207,13 @@ const Prediction = () => {
                     <div className="bg-surface-container-low p-8 rounded-lg">
                       <span className="text-[10px] uppercase tracking-widest font-bold text-neutral-500 block mb-4">Performance</span>
                       <div className="text-[3.5rem] font-bold leading-none tracking-tighter text-primary">
-                        {result.prediction.toUpperCase()}
+                        {result?.prediction?.toUpperCase() || 'N/A'}
                       </div>
                     </div>
                     <div className="bg-surface-container-low p-8 rounded-lg border-l-4 border-primary">
                       <span className="text-[10px] uppercase tracking-widest font-bold text-neutral-500 block mb-4">Dropout Risk</span>
                       <div className="text-[3.5rem] font-bold leading-none tracking-tighter text-primary">
-                        {result.dropout_risk.toUpperCase()}
+                        {result?.dropout_risk?.toUpperCase() || 'N/A'}
                       </div>
                     </div>
                   </div>

@@ -9,27 +9,32 @@ const Analytics = () => {
     passVsFail: { passingPercentage: 0 },
     scatterPoints: [],
     correlationData: [0, 0, 0, 0],
+    performanceTrend: [],
     insights: { summary: '', focus_areas: [] }
   });
   const [showInsight, setShowInsight] = useState(false);
 
   useEffect(() => {
     fetch('/api/analytics')
-      .then(res => res.json())
-      .then(payload => setData(payload))
-      .catch(err => console.error(err));
+      .then(res => res.ok ? res.json() : { error: true })
+      .then(payload => {
+        if (!payload.error) setData(prev => ({ ...prev, ...payload }));
+      })
+      .catch(err => console.error("Analytics fetch error:", err));
   }, []);
   return (
     <Layout title="Analytics">
       {/* Hero Metric Section - Asymmetric Density */}
-      <section className="grid grid-cols-12 gap-8 mb-12">
-        <div className="col-span-12 md:col-span-7 flex flex-col justify-end">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        <div className="col-span-1 lg:col-span-7 flex flex-col justify-end px-2">
           <p className="label-sm text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2">Institutional Performance</p>
-          <h2 className="text-6xl font-extrabold tracking-tight text-primary leading-none">{data.institutionalPerformance}<span className="text-3xl font-medium text-neutral-400">%</span></h2>
+          <h2 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-primary leading-none">
+            {data?.institutionalPerformance || 0}<span className="text-3xl font-medium text-neutral-400">%</span>
+          </h2>
           <p className="body-md text-on-surface-variant mt-4 max-w-md leading-relaxed">Overall academic efficiency index calculated across all departments for the current semester cycle.</p>
         </div>
         
-        <div className="col-span-12 md:col-span-5 grid grid-cols-2 gap-4">
+        <div className="col-span-1 lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between">
             <span className="material-symbols-outlined text-neutral-400">trending_up</span>
             <div>
@@ -42,7 +47,7 @@ const Analytics = () => {
             <span className="material-symbols-outlined text-neutral-400">bolt</span>
             <div>
               <p className="text-sm font-medium text-neutral-500">Retention Rate</p>
-              <p className="text-2xl font-bold">{data.retentionRate}%</p>
+              <p className="text-2xl font-bold">{data?.retentionRate || 0}%</p>
             </div>
           </div>
         </div>
@@ -69,7 +74,7 @@ const Analytics = () => {
                 <div className="w-full bg-neutral-100 rounded-t-lg relative group h-48">
                   <div 
                     className="absolute bottom-0 w-full bg-primary rounded-t-lg transition-all duration-500"
-                    style={{ height: `${data.correlationData[idx] || 0}%` }}
+                    style={{ height: `${data?.correlationData?.[idx] || 0}%` }}
                   ></div>
                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                     Avg Marks: {data.correlationData[idx]}%
@@ -96,7 +101,7 @@ const Analytics = () => {
               <circle cx="50" cy="50" fill="transparent" r="40" stroke="#000000" strokeDasharray={`${(data.passVsFail.passingPercentage / 100) * 251.2} 251.2`} strokeLinecap="round" strokeWidth="12"></circle>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <span className="text-3xl font-bold">{data.passVsFail.passingPercentage}%</span>
+              <span className="text-3xl font-bold">{data?.passVsFail?.passingPercentage || 0}%</span>
               <span className="text-[10px] text-neutral-400 uppercase font-bold tracking-widest">Passing</span>
             </div>
           </div>
@@ -113,7 +118,58 @@ const Analytics = () => {
           </div>
         </div>
 
-        {/* Chart 3: Scatter Plot (Study Hours vs Marks) */}
+        {/* Chart 3: Performance Trend (Line Chart) */}
+        <div className="lg:col-span-3 bg-surface-container-lowest rounded-xl p-8 flex flex-col h-[400px]">
+          <div className="flex justify-between items-start mb-10">
+            <div>
+              <h3 className="text-lg font-semibold tracking-tight">Institutional Performance Trend</h3>
+              <p className="text-xs text-neutral-500 font-medium mt-1">Average marks (%) trend over current academic semester</p>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full uppercase tracking-widest">
+              <span className="material-symbols-outlined text-[12px]">trending_up</span>
+              +2.4% vs Prev
+            </div>
+          </div>
+          
+          <div className="flex-1 relative flex items-end justify-between px-10 pb-8 mt-4">
+            {/* Background Grid Lines */}
+            <div className="absolute inset-0 flex flex-col justify-between px-10 pb-8 pointer-events-none opacity-20">
+              {[1, 2, 3, 4].map(i => <div key={i} className="border-t border-neutral-300 w-full h-0"></div>)}
+            </div>
+
+            <svg className="absolute inset-0 px-10 pb-8 w-full h-full overflow-visible" preserveAspectRatio="none">
+              <polyline
+                fill="none"
+                stroke="#000000"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                points={(data?.performanceTrend || []).map((point, i, arr) => {
+                  const x = (i / (arr.length - 1)) * 100;
+                  const y = 100 - (point.score); // Assuming score is %
+                  return `${x}% ${y}%`;
+                }).join(', ')}
+                className="drop-shadow-lg"
+              />
+              {/* Data points */}
+              {(data?.performanceTrend || []).map((point, i, arr) => {
+                const x = (i / (arr.length - 1)) * 100;
+                const y = 100 - (point.score);
+                return (
+                  <circle key={i} cx={`${x}%`} cy={`${y}%`} r="5" fill="#000000" className="hover:r-7 transition-all cursor-pointer" />
+                );
+              })}
+            </svg>
+
+            {(data?.performanceTrend || []).map((point) => (
+              <div key={point.period} className="flex flex-col items-center gap-2 relative z-10">
+                <span className="text-[10px] font-bold text-neutral-400 mt-4 uppercase tracking-tighter">{point.period}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Chart 4: Individual Student Effort Mapping (Scatter) */}
         <div className="lg:col-span-3 bg-surface-container-lowest rounded-xl p-8 flex flex-col min-h-[450px]">
           <div className="flex justify-between items-center mb-10">
             <div>
@@ -128,15 +184,15 @@ const Analytics = () => {
           
           <div className="flex-1 relative border-l-2 border-b-2 border-surface-container-low mb-8 ml-8">
             {/* Dynamic Plotting */}
-            {data.scatterPoints.map((point, index) => (
+            {(data?.scatterPoints || []).map((point, index) => (
               <div 
                 key={index}
                 className="absolute w-2 h-2 bg-neutral-800 rounded-full opacity-60 hover:w-3 hover:h-3 hover:bg-primary transition-all"
                 style={{ 
-                  left: `${(point.x / 14) * 100}%`, 
-                  bottom: `${point.y}%` 
+                  left: `${(point?.x / 14) * 100}%`, 
+                  bottom: `${point?.y}%` 
                 }}
-                title={`Study Hours: ${point.x}, Marks: ${point.y}`}
+                title={`Study Hours: ${point?.x}, Marks: ${point?.y}`}
               ></div>
             ))}
             
@@ -188,14 +244,14 @@ const Analytics = () => {
               <div className="space-y-6">
                 <div>
                   <p className="text-sm text-on-surface-variant leading-relaxed mb-4">
-                    {data.insights.summary}
+                    {data?.insights?.summary || "No insights available yet. Enroll more students to generate analytics."}
                   </p>
                 </div>
                 
                 <div>
                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-3">Key Focus Areas</h4>
                   <div className="space-y-2">
-                    {data.insights.focus_areas.map((area, i) => (
+                    {(data?.insights?.focus_areas || []).map((area, i) => (
                       <div key={i} className="flex gap-3 p-3 bg-surface-container-low rounded-lg items-start border-l-4 border-primary">
                         <span className="material-symbols-outlined text-sm mt-0.5 text-primary">priority_high</span>
                         <p className="text-xs font-medium text-on-surface">{area}</p>

@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "(npm run dev --prefix frontend &) && (cd backend && source ../.venv/bin/activate && python3 app.py)",
+    "build": "npm run build --prefix frontend",
+    "lint": "npm run lint --prefix frontend",
+    "preview": "npm run preview --prefix frontend",
     "stop": "pkill -f 'python3 app.py' && pkill -f 'vite'",
     "install-all": "npm install --prefix frontend && pip install -r backend/requirements.txt"
   },

@@ -6,6 +6,9 @@ import Login from './pages/Login';
 import Analytics from './pages/Analytics';
 import StudentData from './pages/StudentData';
 import Reports from './pages/Reports';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   const isAuthenticated = true; // Temporary mock
@@ -16,23 +19,17 @@ function App() {
         <Route path="/login" element={<Login />} />
         
         {/* Protected Routes Wrapper */}
-        <Route
-          path="/*"
-          element={
-            isAuthenticated ? (
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/prediction" element={<Prediction />} />
-                <Route path="/student-data" element={<StudentData />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/reports" element={<Reports />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+          <Route index element={<Dashboard />} />
+          <Route path="prediction" element={<Prediction />} />
+          <Route path="student-data" element={<StudentData />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="reports" element={<Reports />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to={isAuthenticated ? "/" : "/login"} replace />} />
       </Routes>
     </Router>
   );

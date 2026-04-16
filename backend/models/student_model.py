@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -9,6 +10,7 @@ class Student(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     initials = db.Column(db.String(5), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Metrics
     marks                 = db.Column(db.Float, default=0.0)

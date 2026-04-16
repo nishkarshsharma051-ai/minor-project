@@ -21,6 +21,7 @@ with engine.connect() as conn:
         conn.execute(text("ALTER TABLE students ADD COLUMN IF NOT EXISTS participation FLOAT DEFAULT 0.0;"))
         conn.execute(text("ALTER TABLE students ADD COLUMN IF NOT EXISTS coding_score FLOAT DEFAULT 0.0;"))
         conn.execute(text("ALTER TABLE students ADD COLUMN IF NOT EXISTS communication_score FLOAT DEFAULT 0.0;"))
+        conn.execute(text("ALTER TABLE students ADD COLUMN IF NOT EXISTS created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;"))
         conn.commit()
         print("Migration successful.")
     except Exception as e:
