@@ -29,6 +29,11 @@ class Student(db.Model):
     def display_name(self):
         return f"{self.first_name} {self.last_name}"
 
+    @property
+    def dynamic_cgpa(self):
+        # Default calculation: Marks / 10
+        return round(float(self.marks or 0) / 10.0, 2)
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -36,6 +41,7 @@ class Student(db.Model):
             "initials": self.initials,
             "attendance": round(float(self.attendance or 0), 1),
             "marks": round(float(self.marks or 0), 1),
+            "cgpa": self.dynamic_cgpa,
             "studyHours": round(float(self.study_hours or 0), 1),
             "assignment_completion": round(float(self.assignment_completion or 0), 1),
             "participation": round(float(self.participation or 0), 1),
@@ -43,6 +49,5 @@ class Student(db.Model):
             "communication_score": round(float(self.communication_score or 0), 1),
             "attendanceRisk": self.attendance_risk,
             "dropoutRisk": self.dropout_risk
-
         }
 

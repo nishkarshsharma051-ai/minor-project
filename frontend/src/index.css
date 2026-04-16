@@ -19,3 +19,34 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progressFull {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-progress-full {
+  animation: progressFull 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 3s ease-in-out infinite;
+}
+
+.fill-mode-forwards {
+  animation-fill-mode: forwards;
+}

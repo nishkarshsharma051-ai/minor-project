@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import AppIcon from '../components/AppIcon';
+import { API_BASE_URL } from '../config';
 
 const Reports = () => {
   const [students, setStudents] = useState([]);
@@ -9,14 +10,14 @@ const Reports = () => {
   const [totalPages, setTotalPages] = useState(1);
   
   useEffect(() => {
-    fetch('/api/dashboard/summary')
+    fetch(`${API_BASE_URL}/api/dashboard/summary`)
       .then(res => res.json())
       .then(data => setSummary(data))
       .catch(console.error);
   }, []);
   
   useEffect(() => {
-    fetch(`/api/students?page=${page}&limit=5`)
+    fetch(`${API_BASE_URL}/api/students?page=${page}&limit=5`)
       .then(res => res.json())
       .then(data => {
         setStudents(data.data || []);
@@ -34,7 +35,7 @@ const Reports = () => {
           <h2 className="text-4xl font-semibold tracking-tight text-neutral-900">Student Risk Assessment</h2>
         </div>
         <button 
-          onClick={() => window.open('/download-report?format=csv&marks=60&attendance=80&assignment_completion=50&participation=75&coding_score=85&communication_score=70')}
+          onClick={() => window.open(`${API_BASE_URL}/download-report?format=csv&marks=60&attendance=80&assignment_completion=50&participation=75&coding_score=85&communication_score=70`)}
           className="bg-primary text-on-primary px-6 py-2.5 rounded shadow-lg hover:opacity-90 transition-all flex items-center space-x-2">
           <AppIcon icon="download" className="h-4 w-4" />
           <span className="text-sm font-medium">Download Sample Report</span>
@@ -120,14 +121,14 @@ const Reports = () => {
                   </td>
                   <td className="px-8 py-5 text-right">
                     <button 
-                      onClick={() => window.open(`/download-report?format=pdf&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.assignment_completion}&participation=${st.participation}&coding_score=${st.coding_score}&communication_score=${st.communication_score}`)}
+                      onClick={() => window.open(`${API_BASE_URL}/download-report?format=pdf&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.assignment_completion}&participation=${st.participation}&coding_score=${st.coding_score}&communication_score=${st.communication_score}`)}
                       className={`px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
                       title="Download PDF ML Report"
                     >
                       <AppIcon icon="picture_as_pdf" className="h-4 w-4" />
                     </button>
                     <button 
-                      onClick={() => window.open(`/download-report?format=csv&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.assignment_completion}&participation=${st.participation}&coding_score=${st.coding_score}&communication_score=${st.communication_score}`)}
+                      onClick={() => window.open(`${API_BASE_URL}/download-report?format=csv&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.assignment_completion}&participation=${st.participation}&coding_score=${st.coding_score}&communication_score=${st.communication_score}`)}
                       className={`ml-1 px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
                       title="Download CSV Evaluation"
                     >
@@ -164,29 +165,15 @@ const Reports = () => {
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-surface-container-lowest p-8 rounded-xl">
           <h4 className="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-6">Historical Comparison</h4>
-          <div className="flex items-end space-x-4 h-40">
-            <div className="flex-1 bg-neutral-100 h-[40%] rounded-t-sm"></div>
-            <div className="flex-1 bg-neutral-200 h-[60%] rounded-t-sm"></div>
-            <div className="flex-1 bg-neutral-300 h-[55%] rounded-t-sm"></div>
-            <div className="flex-1 bg-neutral-400 h-[80%] rounded-t-sm"></div>
-            <div className="flex-1 bg-black h-[95%] rounded-t-sm"></div>
-          </div>
-          <div className="flex justify-between mt-4 text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-            <span>Oct</span>
-            <span>Nov</span>
-            <span>Dec</span>
-            <span>Jan</span>
-            <span>Feb</span>
+          <div className="flex items-center justify-center h-40 border-2 border-dashed border-neutral-100 rounded-lg">
+             <p className="text-xs text-neutral-400 font-medium tracking-wide italic">Multi-month comparative data will appear here.</p>
           </div>
         </div>
         
         <div className="bg-surface-container-lowest p-8 rounded-xl flex flex-col justify-between">
           <div>
             <h4 className="text-sm font-bold uppercase tracking-widest text-neutral-500 mb-2">Trend Analysis</h4>
-            <p className="text-sm text-neutral-500 leading-relaxed">Risk factors have decreased by 2.4% since the last reporting cycle. Predictive modeling suggests a continued stabilization through Q3.</p>
-          </div>
-          <div className="pt-6">
-            <button className="text-black text-xs font-bold uppercase tracking-widest underline decoration-2 underline-offset-4">View detailed trends</button>
+            <p className="text-sm text-neutral-500 leading-relaxed italic">Insufficient longitudinal data to generate automated trend analysis at this time.</p>
           </div>
         </div>
       </div>

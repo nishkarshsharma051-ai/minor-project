@@ -1,8 +1,56 @@
-# ScholarMetrics API
+# EduSetu Monorepo
+
+Unified student analytics system with a Flask ML backend and React frontend.
+
+## Deployment Guide
+
+### 1. Installation
+Run the following from the root directory to install both frontend and backend dependencies:
+```bash
+npm run install-all
+```
+
+### 2. Environment Variables
+Ensure you have a `.env` file in the `backend/` directory with the following keys:
+- `DATABASE_URL`: Your Supabase connection string.
+- `FIREBASE_SERVICE_ACCOUNT`: Path to your Firebase service account JSON (e.g., `serviceAccountKey.json`).
+- `PORT`: (Optional) Port numbers (default: 5001).
+
+On the frontend, add your Firebase keys to `frontend/src/utils/firebase.js`.
+
+### 3. Production Start (Single Command)
+To build the frontend and start the backend server for production:
+```bash
+npm start
+```
+This command builds the React app and starts the Flask server using **Gunicorn**. The backend automatically serves the frontend static files.
+
+### 4. Development
+To run both services in development mode with hot-reload:
+```bash
+npm run dev
+```
+
+## Tech Stack
+- **Frontend**: React, Vite, Tailwind CSS, Firebase Auth
+- **Backend**: Flask, scikit-learn, SQLAlchemy (Supabase), Firebase Admin SDK
+- **Database**: PostgreSQL (via Supabase)
+- **Deployment**: Gunicorn (WSGI Server)
+
+## Project Structure
+```
+.                   # Root Directory
+├── backend/        # Flask ML Backend
+├── frontend/       # React Vite Frontend
+├── package.json    # Root scripts for deployment
+└── run.sh          # Legacy dev script
+```
+
+---
+
+## Backend Details (Legacy Readme)
 
 A Python-based analytics engine for predicting student performance and inferring skills. It uses a Random Forest model to provide data-driven insights and automated reports.
-
-## Quick Start
 
 ### 1. Environment Setup
 ```bash

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../components/Layout';
 import AppIcon from '../components/AppIcon';
+import { API_BASE_URL } from '../config';
 import axios from 'axios';
 
 
@@ -12,7 +13,12 @@ const StudentData = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [activeMetric, setActiveMetric] = useState(localStorage.getItem('edu_setu_primary_metric') || 'percentage');
+  
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get('search') || '';
 
   
   // Modal State
@@ -31,12 +37,12 @@ const StudentData = () => {
   const limit = 5;
 
   const fetchSummary = () => {
-    fetch('/api/students/summary')
+    fetch(`${API_BASE_URL}/api/students/summary`)
       .then(res => res.json())
       .then(data => setSummary(data))
       .catch(err => console.error("Failed to fetch summary:", err));
 
-    fetch('/api/analytics')
+    fetch(`${API_BASE_URL}/api/analytics`)
       .then(res => res.json())
       .then(data => {
         const trendData = data.performanceTrend || [];
@@ -56,7 +62,7 @@ const StudentData = () => {
 
   const fetchStudents = () => {
     setLoading(true);
-    fetch(`/api/students?page=${page}&limit=${limit}`)
+    fetch(`${API_BASE_URL}/api/students?page=${page}&limit=8${searchQuery ? `&search=${encodeURIComponent(searchQuery)}` : ''}`)
       .then(res => res.json())
       .then(data => {
         setStudents(data.data || []);
@@ -75,17 +81,17 @@ const StudentData = () => {
 
   useEffect(() => {
     fetchStudents();
-  }, [page]);
+  }, [page, searchQuery]);
 
   const handleEnrollSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/students', {
+      const response = await fetch(`${API_BASE_URL}/api/students`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(enrollForm)
       });
-      if (res.ok) {
+      if (response.ok) {
         setIsModalOpen(false);
         setEnrollForm({ 
           firstName: '', lastName: '', marks: '', attendance: '', 
@@ -118,7 +124,7 @@ const StudentData = () => {
   const handleDeleteStudent = async (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}? This action cannot be undone.`)) {
       try {
-        const res = await fetch(`/api/students/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${API_BASE_URL}/api/students/${id}`, { method: 'DELETE' });
         if (res.ok) {
           fetchSummary();
           fetchStudents();
@@ -143,12 +149,34 @@ const StudentData = () => {
         <div>
           <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant mb-2 block">Institutional Management</span>
           <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-primary">Student Data</h2>
+          {searchQuery && (
+            <div className="flex items-center gap-2 mt-4 text-xs font-bold text-neutral-500 uppercase tracking-widest bg-neutral-50 px-3 py-1.5 rounded-full w-fit animate-in fade-in slide-in-from-left-2 duration-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Showing results for: "{searchQuery}"
+              <button 
+                onClick={() => navigate('/student-data')}
+                className="ml-2 text-primary hover:text-black underline underline-offset-2"
+              >
+                Clear
+              </button>
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-3 w-full sm:w-auto">
-          <button className="flex-1 sm:flex-none flex items-center justify-center px-4 py-2 bg-white border border-outline-variant border-opacity-15 rounded-lg text-sm font-medium hover:bg-surface-container-low transition-colors">
-            <AppIcon icon="filter_list" className="mr-2 h-5 w-5" />
-            Filter
-          </button>
+          <div className="flex bg-surface-container-high p-1 rounded-xl border border-outline-variant/10">
+            <button 
+              onClick={() => { setActiveMetric('percentage'); localStorage.setItem('edu_setu_primary_metric', 'percentage'); }}
+              className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${activeMetric === 'percentage' ? 'bg-black text-white' : 'text-neutral-400 hover:text-neutral-600'}`}
+            >
+              %
+            </button>
+            <button 
+              onClick={() => { setActiveMetric('cgpa'); localStorage.setItem('edu_setu_primary_metric', 'cgpa'); }}
+              className={`px-4 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${activeMetric === 'cgpa' ? 'bg-black text-white' : 'text-neutral-400 hover:text-neutral-600'}`}
+            >
+              CGPA
+            </button>
+          </div>
           <button 
             onClick={() => setIsModalOpen(true)}
             className="flex-1 sm:flex-none flex items-center justify-center px-6 py-2 bg-primary text-on-primary rounded-lg text-sm font-medium hover:bg-primary-container hover:text-black transition-all">
@@ -203,7 +231,17 @@ const StudentData = () => {
                   <tr className="bg-surface-container-low">
                     <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Name</th>
                     <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Attendance (%)</th>
-                    <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Internal Marks</th>
+                    {activeMetric === 'percentage' ? (
+                      <>
+                        <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Marks (%)</th>
+                        <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Secondary (CGPA)</th>
+                      </>
+                    ) : (
+                      <>
+                        <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">CGPA (10.0)</th>
+                        <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Secondary (%)</th>
+                      </>
+                    )}
                     <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-center">Study Hours</th>
                     <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-right">Actions</th>
                   </tr>
@@ -223,7 +261,17 @@ const StudentData = () => {
                           </div>
                         </td>
                         <td className="px-8 py-6 text-center"><span className={`text-sm ${student.attendanceRisk ? 'font-bold text-error' : 'font-semibold'}`}>{student.attendance}%</span></td>
-                        <td className="px-8 py-6 text-center"><span className="text-sm">{student.marks}</span></td>
+                        {activeMetric === 'percentage' ? (
+                          <>
+                            <td className="px-8 py-6 text-center"><span className="text-sm font-bold text-primary">{student.marks}%</span></td>
+                            <td className="px-8 py-6 text-center"><span className="text-sm text-neutral-400 font-medium">{student.cgpa}</span></td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-8 py-6 text-center"><span className="text-sm font-bold text-primary">{student.cgpa}</span></td>
+                            <td className="px-8 py-6 text-center"><span className="text-sm text-neutral-400 font-medium">{student.marks}%</span></td>
+                          </>
+                        )}
                         <td className="px-8 py-6 text-center"><span className="text-sm">{student.studyHours}</span></td>
                         <td className="px-8 py-6 text-right flex justify-end gap-2">
                           <button 
@@ -308,8 +356,32 @@ const StudentData = () => {
                   <label className="block text-xs font-semibold text-white/50 mb-1 uppercase tracking-wider">Marks (%)</label>
                   <input type="number" step="0.1" required
                     className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-white focus:outline-none transition-colors text-white"
-                    value={enrollForm.marks} onChange={e => setEnrollForm({...enrollForm, marks: e.target.value})} />
+                    value={enrollForm.marks} 
+                    onChange={e => {
+                      const val = e.target.value;
+                      setEnrollForm({
+                        ...enrollForm, 
+                        marks: val,
+                        cgpa: val ? (parseFloat(val) / 10).toFixed(2) : ''
+                      });
+                    }} />
                 </div>
+                <div>
+                  <label className="block text-xs font-semibold text-white/50 mb-1 uppercase tracking-wider">CGPA (10.0)</label>
+                  <input type="number" step="0.01" required
+                    className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 focus:border-white focus:outline-none transition-colors text-white"
+                    value={enrollForm.cgpa || ''} 
+                    onChange={e => {
+                      const val = e.target.value;
+                      setEnrollForm({
+                        ...enrollForm, 
+                        cgpa: val,
+                        marks: val ? (parseFloat(val) * 10).toFixed(1) : ''
+                      });
+                    }} />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-white/50 mb-1 uppercase tracking-wider">Attendance (%)</label>
                   <input type="number" step="0.1" required

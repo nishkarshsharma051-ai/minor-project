@@ -27,8 +27,12 @@ venv/
 ENV/
 
 # Project Specific
+serviceAccountKey.json
 models/*.pkl
+models/*.joblib
 data/*.csv
 *.pdf
 .DS_Store
 .env
+.env.local
+.env.production

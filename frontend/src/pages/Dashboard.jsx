@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
 import AppIcon from '../components/AppIcon';
+import { API_BASE_URL } from '../config';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -9,21 +10,21 @@ const Dashboard = () => {
     avgPerformance: 0,
     atRiskStudents: 0,
     performanceTrend: 'up',
-    trendValue: '0'
+    trendValue: '0.0'
   });
 
   const [details, setDetails] = useState({ alerts: [], distribution: [0,0,0,0,0] });
 
   useEffect(() => {
-    axios.get('/api/dashboard/summary')
+    axios.get(`${API_BASE_URL}/api/dashboard/summary`)
       .then(res => setStats(prev => ({ ...prev, ...res.data })))
       .catch(err => console.error("Failed to fetch dashboard stats", err));
 
-    axios.get('/api/dashboard/details')
+    axios.get(`${API_BASE_URL}/api/dashboard/details`)
       .then(res => setDetails(res.data))
       .catch(err => console.error("Failed to fetch dashboard details", err));
 
-    axios.get('/api/analytics').then(res => {
+    axios.get(`${API_BASE_URL}/api/analytics`).then(res => {
       const trend = res.data.performanceTrend;
       if (trend && trend.length >= 2) {
         const last = trend[trend.length - 1].score;
@@ -82,7 +83,22 @@ const Dashboard = () => {
                 Avg. Performance
               </span>
               <div className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tighter text-primary">
-                {stats?.avgPerformance || 0}<span className="text-2xl lg:text-3xl font-medium">%</span>
+                {localStorage.getItem('edu_setu_primary_metric') === 'cgpa' ? (
+                  <>
+                    {((stats?.avgPerformance || 0) / 10).toFixed(1)}
+                    <span className="text-2xl lg:text-3xl font-medium ml-1">CGPA</span>
+                    <p className="text-xs font-bold text-neutral-400 mt-2 tracking-widest uppercase opacity-60">
+                      {stats?.avgPerformance || 0}% equivalent
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    {stats?.avgPerformance || 0}<span className="text-2xl lg:text-3xl font-medium">%</span>
+                    <p className="text-xs font-bold text-neutral-400 mt-2 tracking-widest uppercase opacity-60">
+                      | {((stats?.avgPerformance || 0) / 10).toFixed(1)} CGPA
+                    </p>
+                  </>
+                )}
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-neutral-500">

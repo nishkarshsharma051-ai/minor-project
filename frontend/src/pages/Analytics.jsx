@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import AppIcon from '../components/AppIcon';
+import { API_BASE_URL } from '../config';
 
 const Analytics = () => {
   const [data, setData] = useState({
@@ -16,7 +17,7 @@ const Analytics = () => {
   const [showInsight, setShowInsight] = useState(false);
 
   useEffect(() => {
-    fetch('/api/analytics')
+    fetch(`${API_BASE_URL}/api/analytics`)
       .then(res => res.ok ? res.json() : { error: true })
       .then(payload => {
         if (!payload.error) setData(prev => ({ ...prev, ...payload }));
@@ -29,8 +30,20 @@ const Analytics = () => {
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         <div className="col-span-1 lg:col-span-7 flex flex-col justify-end px-2">
           <p className="label-sm text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2">Institutional Performance</p>
-          <h2 className="text-5xl lg:text-6xl font-extrabold tracking-tight text-primary leading-none">
-            {data?.institutionalPerformance || 0}<span className="text-3xl font-medium text-neutral-400">%</span>
+          <h2 className="text-5xl lg:text-8xl font-extrabold tracking-tight text-primary leading-none">
+            {localStorage.getItem('edu_setu_primary_metric') === 'cgpa' ? (
+              <>
+                {((data?.institutionalPerformance || 0) / 10).toFixed(1)}
+                <span className="text-3xl font-medium text-neutral-400 ml-2">CGPA</span>
+              </>
+            ) : (
+              <>
+                {data?.institutionalPerformance || 0}<span className="text-3xl font-medium text-neutral-400">%</span>
+              </>
+            )}
+            <span className="text-sm font-bold text-neutral-400 ml-4 tracking-[0.2em] relative -top-6">
+              | {localStorage.getItem('edu_setu_primary_metric') === 'cgpa' ? `${data?.institutionalPerformance || 0}%` : `${((data?.institutionalPerformance || 0) / 10).toFixed(1)} CGPA`}
+            </span>
           </h2>
           <p className="body-md text-on-surface-variant mt-4 max-w-md leading-relaxed">Overall academic efficiency index calculated across all departments for the current semester cycle.</p>
         </div>
@@ -92,7 +105,7 @@ const Analytics = () => {
         <div className="bg-surface-container-lowest rounded-xl p-8 flex flex-col h-[400px]">
           <div className="mb-8">
             <h3 className="text-lg font-semibold tracking-tight">Pass vs Fail Ratio</h3>
-            <p className="text-xs text-neutral-500 font-medium mt-1">Mid-term evaluation results</p>
+            <p className="text-xs text-neutral-500 font-medium mt-1">Based on global pass threshold (40%)</p>
           </div>
           
           <div className="flex-1 flex flex-col items-center justify-center relative scale-90 sm:scale-100">
@@ -220,7 +233,7 @@ const Analytics = () => {
       </div>
 
       <footer className="mt-16 flex justify-between items-center text-neutral-400">
-        <p className="text-xs font-medium">© 2024 EduSetu Analytics Engine. All data refreshed 4 minutes ago.</p>
+        <p className="text-xs font-medium">© 2024 EduSetu Analytics Engine. Data refreshed in real-time.</p>
         <div className="flex gap-4">
           <a className="text-xs hover:text-primary underline-offset-4 hover:underline" href="#">Compliance</a>
           <a className="text-xs hover:text-primary underline-offset-4 hover:underline" href="#">API Docs</a>

@@ -1,12 +1,15 @@
 import logging
 import os
 from flask import Flask, jsonify, send_from_directory
+from flask_cors import CORS
 
 from routes.health   import health_bp
 from routes.predict  import predict_bp
 from routes.train    import train_bp
 from routes.download import download_bp
 from routes.students import students_bp
+from routes.user_routes import user_bp
+from utils.auth_middleware import init_firebase
 from utils.model_utils import load_model
 from models.student_model import db
 from dotenv import load_dotenv
@@ -24,13 +27,33 @@ logger = logging.getLogger(__name__)
 
 def create_app() -> Flask:
     """Application factory for the ScholarMetrics API."""
-    frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist'))
-    app = Flask(__name__, static_folder=frontend_dir, static_url_path='/')
+    # Determine frontend directory for static serving
+    # Fallback to current directory if parent structure isn't matched
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    frontend_dir = os.path.abspath(os.path.join(current_dir, '..', 'frontend', 'dist'))
+    
+    if os.path.exists(frontend_dir):
+        app = Flask(__name__, static_folder=frontend_dir, static_url_path='/')
+        logger.info(f"Serving static files from: {frontend_dir}")
+    else:
+        app = Flask(__name__)
+        logger.warning(f"Static folder NOT FOUND at {frontend_dir}. Skipping static serving.")
+    
+    # Enable CORS - prioritize specific origins for security, or fallback to "*"
+    allowed_origins = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
+    CORS(app, resources={r"/*": {"origins": allowed_origins}})
 
     # Database setup
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+
+    # Initialize Firebase Admin
+    init_firebase()
+
+    # Create tables (UserProfile)
+    with app.app_context():
+        db.create_all()
 
     # Load model on startup
     try:
@@ -47,6 +70,7 @@ def create_app() -> Flask:
     app.register_blueprint(train_bp)
     app.register_blueprint(download_bp)
     app.register_blueprint(students_bp)
+    app.register_blueprint(user_bp, url_prefix='/api')
 
     # Standard error handlers
     @app.errorhandler(400)

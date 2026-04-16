@@ -23,8 +23,13 @@ def get_student_summary():
 def get_students():
     page = request.args.get("page", 1, type=int)
     limit = request.args.get("limit", 10, type=int)
+    search_query = request.args.get("search", "").strip()
     
-    pagination = Student.query.paginate(page=page, per_page=limit, error_out=False)
+    query = Student.query
+    if search_query:
+        query = query.filter(Student.name.ilike(f"%{search_query}%"))
+    
+    pagination = query.paginate(page=page, per_page=limit, error_out=False)
     
     students_data = [student.to_dict() for student in pagination.items]
     
@@ -169,14 +174,15 @@ def get_analytics():
     performance_trend = []
     month_names = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     
-    # If we only have one month of data, let's provide some mock "previous" points for visual effect
-    if len(trend_query) <= 1:
-        current_avg = round(float(avg_marks), 1)
-        performance_trend = [
-            {"period": "Feb", "score": current_avg - 2},
-            {"period": "Mar", "score": current_avg - 1},
-            {"period": "Apr", "score": current_avg}
-        ]
+    # If we only have one month of data, show only that month
+    if len(trend_query) == 1:
+        month, score = trend_query[0]
+        performance_trend = [{
+            "period": month_names[month.month - 1],
+            "score": round(float(score), 1)
+        }]
+    elif len(trend_query) == 0:
+        performance_trend = []
     else:
         for month, score in trend_query:
             performance_trend.append({
@@ -208,8 +214,8 @@ def get_analytics():
         "correlationData": correlation_data,
         "performanceTrend": performance_trend,
         "insights": {
-            "summary": "Academic performance is showing a positive trend.",
-            "focus_areas": ["Mathematics attendance", "Coding lab participation"]
+            "summary": "Enroll more students to generate AI insights." if total_students < 5 else "AI analysis ready.",
+            "focus_areas": []
         }
     }), 200
 
@@ -249,11 +255,7 @@ def get_dashboard_details():
         distribution[bucket_idx] += 1
         
     return jsonify({
-        "alerts": alerts[:4] if alerts else [{
-            "type": "info",
-            "title": "All Clear",
-            "content": "No critical attendance or performance alerts detected."
-        }],
+        "alerts": alerts[:4] if alerts else [],
         "distribution": distribution
     })
 

@@ -2,7 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import AppIcon from './AppIcon';
 import logo from '../assets/logo.png';
-import institutionLogo from '../assets/institution_logo.png';
+import { auth } from '../utils/firebase';
+import { signOut } from 'firebase/auth';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const navItems = [
@@ -12,6 +13,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Analytics', path: '/analytics', icon: 'analytics' },
     { name: 'Reports', path: '/reports', icon: 'description' },
   ];
+
+  const user = auth.currentUser;
+  const userPhoto = user?.photoURL;
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
     <aside className={`h-screen w-64 fixed left-0 top-0 flex flex-col bg-black dark:bg-neutral-950 py-6 z-50 transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
@@ -76,16 +88,27 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </NavLink>
         </div>
       </nav>
-      <div className="px-6 mt-auto">
+      <div className="px-6 mt-auto space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center overflow-hidden border border-neutral-700">
-            <img src={institutionLogo} alt="Institution" className="w-full h-full object-cover" />
+          <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center overflow-hidden border border-neutral-700 text-neutral-400">
+            {userPhoto ? (
+               <img src={userPhoto} alt="User" className="w-full h-full object-cover" />
+            ) : (
+               <AppIcon icon="person" className="h-4 w-4" />
+            )}
           </div>
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-widest font-bold text-neutral-500">Institution</span>
-            <span className="text-xs text-white">Main Campus</span>
+            <span className="text-[10px] uppercase tracking-widest font-bold text-neutral-500">User</span>
+            <span className="text-xs text-white truncate max-w-[100px]">{user?.displayName || user?.email?.split('@')[0] || 'Member'}</span>
           </div>
         </div>
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center px-4 py-3 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all duration-200"
+        >
+          <AppIcon icon="logout" className="mr-3 h-5 w-5" />
+          <span className="text-sm font-regular">Logout</span>
+        </button>
       </div>
     </aside>
   );

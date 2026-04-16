@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 import logo from '../assets/logo.png';
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -25,7 +30,7 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignup = async () => {
     setLoading(true);
     setError(null);
     const provider = new GoogleAuthProvider();
@@ -41,29 +46,26 @@ const Login = () => {
 
   return (
     <div className="bg-surface text-on-surface flex items-center justify-center min-h-screen p-4 overflow-hidden relative font-body">
-      {/* Intentional Void Background */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-surface-container-low rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
         <div className="absolute top-1/2 -right-24 w-64 h-64 bg-surface-container-high rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
       </div>
 
       <main className="relative z-10 w-full max-w-md">
-        {/* Branding Header */}
         <div className="text-center mb-12">
           <div className="flex flex-col items-center">
              <img src={logo} alt="EduSetu" className="h-16 w-16 mb-4 object-contain shadow-sm rounded-xl p-2 bg-white" />
              <h1 className="text-xl font-extrabold tracking-tighter text-on-surface mb-2">EduSetu</h1>
           </div>
           <p className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
-            Student Analytics System
+            Create your account
           </p>
         </div>
 
-        {/* Login Card */}
         <div className="bg-white/80 backdrop-blur-3xl rounded-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.04)] p-10 border-0">
           <header className="mb-10">
-            <h2 className="text-2xl font-semibold tracking-tight text-on-surface leading-tight">Welcome back</h2>
-            <p className="text-sm text-on-surface-variant mt-2">Access your academic command center.</p>
+            <h2 className="text-2xl font-semibold tracking-tight text-on-surface leading-tight">Get Started</h2>
+            <p className="text-sm text-on-surface-variant mt-2">Join the academic analytics revolution.</p>
           </header>
 
           {error && (
@@ -72,44 +74,47 @@ const Login = () => {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-8">
+          <form onSubmit={handleSignup} className="space-y-8">
             <div className="space-y-2">
               <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
                 Email Address
               </label>
-              <div className="relative group">
-                <input
-                  className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
-                  type="email"
-                  placeholder="user@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <div className="absolute bottom-0 left-0 h-[1px] w-full bg-outline-variant/20"></div>
-              </div>
+              <input
+                className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
+                type="email"
+                placeholder="user@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
-                  Password
-                </label>
-                <a className="text-[10px] font-bold text-primary hover:underline transition-all" href="#">
-                  Forgot?
-                </a>
-              </div>
-              <div className="relative group">
-                <input
-                  className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <div className="absolute bottom-0 left-0 h-[1px] w-full bg-outline-variant/20"></div>
-              </div>
+              <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
+                Password
+              </label>
+              <input
+                className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
+                Confirm Password
+              </label>
+              <input
+                className="w-full bg-surface-container-low border-none focus:ring-0 px-0 py-3 text-sm font-medium border-b-2 border-transparent focus:border-primary transition-all duration-300 placeholder:text-outline-variant text-black"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             </div>
 
             <button
@@ -117,7 +122,7 @@ const Login = () => {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Authenticating..." : "Sign in to Dashboard"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
@@ -132,7 +137,7 @@ const Login = () => {
             </div>
 
             <button
-              onClick={handleGoogleLogin}
+              onClick={handleGoogleSignup}
               disabled={loading}
               className="w-full h-12 flex items-center justify-center rounded-xl bg-white border border-outline-variant/30 text-on-surface font-semibold text-sm tracking-wide shadow-sm hover:bg-neutral-50 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 space-x-3"
             >
@@ -151,42 +156,22 @@ const Login = () => {
                 />
                 <path
                   fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                 />
               </svg>
-              <span>Sign in with Google</span>
+              <span>Sign up with Google</span>
             </button>
           </div>
 
           <footer className="mt-8 text-center">
             <p className="text-xs text-on-surface-variant">
-              Don't have an account? <Link to="/signup" className="text-primary font-bold hover:underline">Create Account</Link>
+              Already have an account? <Link to="/login" className="text-primary font-bold hover:underline">Sign In</Link>
             </p>
           </footer>
-
-          <footer className="mt-10 pt-8 flex items-center justify-center space-x-2">
-            <div className="w-8 h-[1px] bg-outline-variant/20"></div>
-            <span className="text-[10px] text-on-surface-variant font-medium">SECURED BY EDUSETU PROTOCOL</span>
-            <div className="w-8 h-[1px] bg-outline-variant/20"></div>
-          </footer>
-        </div>
-
-        {/* System Status Decor */}
-        <div className="mt-8 flex justify-between items-center px-2">
-          <div className="flex items-center space-x-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-tight">
-              Systems Operational
-            </span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="text-[10px] font-medium text-on-surface-variant hover:text-primary">HELP</button>
-            <button className="text-[10px] font-medium text-on-surface-variant hover:text-primary">PRIVACY</button>
-          </div>
         </div>
       </main>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
