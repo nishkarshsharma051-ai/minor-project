@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +24,10 @@ const Login = () => {
       <main className="relative z-10 w-full max-w-md">
         {/* Branding Header */}
         <div className="text-center mb-12">
-          <h1 className="text-xl font-extrabold tracking-tighter text-on-surface mb-2">EduSetu</h1>
+          <div className="flex flex-col items-center">
+             <img src={logo} alt="EduSetu" className="h-16 w-16 mb-4 object-contain shadow-sm rounded-xl p-2 bg-white" />
+             <h1 className="text-xl font-extrabold tracking-tighter text-on-surface mb-2">EduSetu</h1>
+          </div>
           <p className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant">
             Student Analytics System
           </p>

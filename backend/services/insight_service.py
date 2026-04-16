@@ -39,7 +39,7 @@ _SUGGESTIONS: dict[str, str] = {
 }
 
 
-@dataclass(slots=True)
+@dataclass
 class Insights:
     summary:     str
     risk:        str

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
+import AppIcon from '../components/AppIcon';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -41,11 +42,11 @@ const Dashboard = () => {
     <Layout title="Dashboard">
       <div className="max-w-7xl mx-auto">
         {/* Dashboard Headline */}
-        <div className="mb-12">
+        <div className="mb-8 lg:mb-12 px-2">
           <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">
             System Overview
           </span>
-          <h2 className="text-4xl font-extrabold tracking-tight text-primary">
+          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-primary">
             Academic Performance
           </h2>
         </div>
@@ -58,14 +59,15 @@ const Dashboard = () => {
               <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">
                 Total Students
               </span>
-              <div className="text-6xl font-semibold tracking-tighter text-primary">
+              <div className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tighter text-primary">
                 {(stats?.totalStudents || 0).toLocaleString()}
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs">
-              <span className={`material-symbols-outlined text-sm mr-1 ${stats?.performanceTrend === 'up' ? 'text-green-600' : 'text-red-500'}`}>
-                {stats?.performanceTrend === 'up' ? 'trending_up' : 'trending_down'}
-              </span>
+              <AppIcon
+                icon={stats?.performanceTrend === 'up' ? 'trending_up' : 'trending_down'}
+                className={`mr-1 h-4 w-4 ${stats?.performanceTrend === 'up' ? 'text-green-600' : 'text-red-500'}`}
+              />
               <span className={`font-bold mr-1 ${stats?.performanceTrend === 'up' ? 'text-green-600' : 'text-red-500'}`}>
                 {stats?.performanceTrend === 'up' ? '+' : '-'}{stats?.trendValue || 0}%
               </span>
@@ -79,12 +81,12 @@ const Dashboard = () => {
               <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">
                 Avg. Performance
               </span>
-              <div className="text-6xl font-semibold tracking-tighter text-primary">
-                {stats?.avgPerformance || 0}<span className="text-3xl font-medium">%</span>
+              <div className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tighter text-primary">
+                {stats?.avgPerformance || 0}<span className="text-2xl lg:text-3xl font-medium">%</span>
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-neutral-500">
-              <span className="material-symbols-outlined text-sm mr-1 text-neutral-400">horizontal_rule</span>
+              <AppIcon icon="horizontal_rule" className="mr-1 h-4 w-4 text-neutral-400" />
               <span>Averaged institutional marks</span>
             </div>
           </div>
@@ -95,12 +97,12 @@ const Dashboard = () => {
               <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-4 block">
                 At-Risk Students
               </span>
-              <div className="text-6xl font-semibold tracking-tighter text-primary">
+              <div className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tighter text-primary">
                 {stats?.atRiskStudents || 0}
               </div>
             </div>
             <div className="mt-6 flex items-center text-xs text-error">
-              <span className="material-symbols-outlined text-sm mr-1">priority_high</span>
+              <AppIcon icon="priority_high" className="mr-1 h-4 w-4" />
               <span>Requires immediate action</span>
             </div>
           </div>
@@ -109,7 +111,7 @@ const Dashboard = () => {
         {/* Analytics Visualizations */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Primary Performance Chart Mockup */}
-          <div className="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/15">
+          <div className="lg:col-span-2 bg-surface-container-lowest p-6 lg:p-8 rounded-xl border border-outline-variant/15">
             <div className="flex justify-between items-end mb-8">
               <div>
                 <span className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant mb-2 block">
@@ -166,9 +168,10 @@ const Dashboard = () => {
                     alert?.type === 'error' ? 'bg-error-container text-error' : 
                     alert?.type === 'warning' ? 'bg-amber-100 text-amber-600' : 'bg-blue-100 text-blue-600'
                   }`}>
-                    <span className="material-symbols-outlined text-sm">
-                      {alert?.type === 'error' ? 'warning' : alert?.type === 'warning' ? 'report' : 'info'}
-                    </span>
+                    <AppIcon
+                      icon={alert?.type === 'error' ? 'warning' : alert?.type === 'warning' ? 'report' : 'info'}
+                      className="h-4 w-4"
+                    />
                   </div>
                   <div>
                     <p className="text-sm font-semibold">{alert?.title || 'System Alert'}</p>

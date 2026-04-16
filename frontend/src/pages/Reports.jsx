@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import AppIcon from '../components/AppIcon';
 
 const Reports = () => {
   const [students, setStudents] = useState([]);
@@ -35,7 +36,7 @@ const Reports = () => {
         <button 
           onClick={() => window.open('/download-report?format=csv&marks=60&attendance=80&assignment_completion=50&participation=75&coding_score=85&communication_score=70')}
           className="bg-primary text-on-primary px-6 py-2.5 rounded shadow-lg hover:opacity-90 transition-all flex items-center space-x-2">
-          <span className="material-symbols-outlined text-sm">download</span>
+          <AppIcon icon="download" className="h-4 w-4" />
           <span className="text-sm font-medium">Download Sample Report</span>
         </button>
       </div>
@@ -120,17 +121,17 @@ const Reports = () => {
                   <td className="px-8 py-5 text-right">
                     <button 
                       onClick={() => window.open(`/download-report?format=pdf&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.assignment_completion}&participation=${st.participation}&coding_score=${st.coding_score}&communication_score=${st.communication_score}`)}
-                      className={`material-symbols-outlined text-sm px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
+                      className={`px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
                       title="Download PDF ML Report"
                     >
-                      picture_as_pdf
+                      <AppIcon icon="picture_as_pdf" className="h-4 w-4" />
                     </button>
                     <button 
                       onClick={() => window.open(`/download-report?format=csv&student_name=${encodeURIComponent(st.name)}&marks=${st.marks}&attendance=${st.attendance}&assignment_completion=${st.assignment_completion}&participation=${st.participation}&coding_score=${st.coding_score}&communication_score=${st.communication_score}`)}
-                      className={`material-symbols-outlined text-sm px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ml-1 ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
+                      className={`ml-1 px-3 py-1.5 rounded-md hover:bg-neutral-200 transition-colors ${st.dropoutRisk === 'high' ? 'text-black' : 'text-neutral-500'}`}
                       title="Download CSV Evaluation"
                     >
-                      csv
+                      <AppIcon icon="csv" className="h-4 w-4" />
                     </button>
 
                   </td>
@@ -146,14 +147,14 @@ const Reports = () => {
               onClick={() => setPage(Math.max(1, page - 1))}
               disabled={page === 1}
               className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors disabled:opacity-50">
-              <span className="material-symbols-outlined text-sm">chevron_left</span>
+              <AppIcon icon="chevron_left" className="h-4 w-4" />
             </button>
             <button className="w-8 h-8 rounded bg-black text-white flex items-center justify-center text-xs font-bold">{page}</button>
             <button 
               onClick={() => setPage(Math.min(totalPages, page + 1))}
               disabled={page >= totalPages}
               className="w-8 h-8 rounded border border-outline-variant/20 flex items-center justify-center hover:bg-white transition-colors">
-              <span className="material-symbols-outlined text-sm">chevron_right</span>
+              <AppIcon icon="chevron_right" className="h-4 w-4" />
             </button>
           </div>
         </div>

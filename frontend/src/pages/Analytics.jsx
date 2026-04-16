@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
+import AppIcon from '../components/AppIcon';
 
 const Analytics = () => {
   const [data, setData] = useState({
@@ -36,7 +37,7 @@ const Analytics = () => {
         
         <div className="col-span-1 lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between">
-            <span className="material-symbols-outlined text-neutral-400">trending_up</span>
+            <AppIcon icon="trending_up" className="h-5 w-5 text-neutral-400" />
             <div>
               <p className="text-sm font-medium text-neutral-500">Avg. Attendance</p>
               <p className="text-2xl font-bold">{data.avgAttendance}%</p>
@@ -44,7 +45,7 @@ const Analytics = () => {
           </div>
           
           <div className="bg-surface-container-lowest p-6 rounded-xl flex flex-col justify-between">
-            <span className="material-symbols-outlined text-neutral-400">bolt</span>
+            <AppIcon icon="bolt" className="h-5 w-5 text-neutral-400" />
             <div>
               <p className="text-sm font-medium text-neutral-500">Retention Rate</p>
               <p className="text-2xl font-bold">{data?.retentionRate || 0}%</p>
@@ -64,7 +65,7 @@ const Analytics = () => {
               <p className="text-xs text-neutral-500 font-medium mt-1">Comparing percentage tiers for Semester 1</p>
             </div>
             <button className="p-2 hover:bg-surface-container-low rounded-lg transition-colors">
-              <span className="material-symbols-outlined text-sm">more_vert</span>
+              <AppIcon icon="more_vert" className="h-4 w-4" />
             </button>
           </div>
           
@@ -94,8 +95,8 @@ const Analytics = () => {
             <p className="text-xs text-neutral-500 font-medium mt-1">Mid-term evaluation results</p>
           </div>
           
-          <div className="flex-1 flex flex-col items-center justify-center relative">
-            <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 100 100">
+          <div className="flex-1 flex flex-col items-center justify-center relative scale-90 sm:scale-100">
+            <svg className="w-40 h-40 lg:w-48 lg:h-48 transform -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" fill="transparent" r="40" stroke="#f3f3f4" strokeWidth="12"></circle>
               {/* Dynamic SVG mapping based on passing percentage */}
               <circle cx="50" cy="50" fill="transparent" r="40" stroke="#000000" strokeDasharray={`${(data.passVsFail.passingPercentage / 100) * 251.2} 251.2`} strokeLinecap="round" strokeWidth="12"></circle>
@@ -126,7 +127,7 @@ const Analytics = () => {
               <p className="text-xs text-neutral-500 font-medium mt-1">Average marks (%) trend over current academic semester</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full uppercase tracking-widest">
-              <span className="material-symbols-outlined text-[12px]">trending_up</span>
+              <AppIcon icon="trending_up" className="h-3 w-3" />
               +2.4% vs Prev
             </div>
           </div>
@@ -137,7 +138,7 @@ const Analytics = () => {
               {[1, 2, 3, 4].map(i => <div key={i} className="border-t border-neutral-300 w-full h-0"></div>)}
             </div>
 
-            <svg className="absolute inset-0 px-10 pb-8 w-full h-full overflow-visible" preserveAspectRatio="none">
+            <svg className="absolute inset-0 px-6 sm:px-10 pb-8 w-full h-full overflow-visible" preserveAspectRatio="none">
               <polyline
                 fill="none"
                 stroke="#000000"
@@ -230,14 +231,14 @@ const Analytics = () => {
       {showInsight && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
-            <div className="p-8">
+            <div className="p-6 lg:p-8">
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">auto_awesome</span>
+                  <AppIcon icon="auto_awesome" className="h-5 w-5 text-primary" />
                   <h3 className="text-xl font-bold">Institutional AI Summary</h3>
                 </div>
                 <button onClick={() => setShowInsight(false)} className="text-neutral-400 hover:text-black">
-                  <span className="material-symbols-outlined">close</span>
+                  <AppIcon icon="close" className="h-5 w-5" />
                 </button>
               </div>
               
@@ -253,7 +254,7 @@ const Analytics = () => {
                   <div className="space-y-2">
                     {(data?.insights?.focus_areas || []).map((area, i) => (
                       <div key={i} className="flex gap-3 p-3 bg-surface-container-low rounded-lg items-start border-l-4 border-primary">
-                        <span className="material-symbols-outlined text-sm mt-0.5 text-primary">priority_high</span>
+                        <AppIcon icon="priority_high" className="mt-0.5 h-4 w-4 text-primary" />
                         <p className="text-xs font-medium text-on-surface">{area}</p>
                       </div>
                     ))}
@@ -275,7 +276,7 @@ const Analytics = () => {
         <button 
           onClick={() => setShowInsight(true)}
           className="flex items-center gap-2 bg-black text-white px-6 py-4 rounded-full shadow-2xl hover:scale-[1.05] transition-all active:scale-95 group">
-          <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">auto_awesome</span>
+          <AppIcon icon="auto_awesome" className="h-5 w-5 group-hover:rotate-12 transition-transform" />
           <span className="text-sm font-semibold">Generate AI Insight</span>
         </button>
       </div>

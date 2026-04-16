@@ -25,7 +25,7 @@ const Layout = ({ children, title }) => {
           title={title} 
           onMenuClick={() => setIsSidebarOpen(true)} 
         />
-        <main className="pt-20 px-4 md:px-10 pb-12">
+        <main className="pt-20 px-4 sm:px-6 md:px-8 lg:px-10 pb-12">
           {children || <Outlet />}
         </main>
       </div>

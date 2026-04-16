@@ -1,18 +1,5 @@
 @import "tailwindcss";
 
-
-
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-}
-
 .grid-subtle {
   background-image: linear-gradient(to right, #e2e2e2 1px, transparent 1px),
                     linear-gradient(to bottom, #e2e2e2 1px, transparent 1px);

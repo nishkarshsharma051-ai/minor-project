@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
+import AppIcon from '../components/AppIcon';
 import axios from 'axios';
 
 
@@ -145,13 +146,13 @@ const StudentData = () => {
         </div>
         <div className="flex items-center space-x-3 w-full sm:w-auto">
           <button className="flex-1 sm:flex-none flex items-center justify-center px-4 py-2 bg-white border border-outline-variant border-opacity-15 rounded-lg text-sm font-medium hover:bg-surface-container-low transition-colors">
-            <span className="material-symbols-outlined text-lg mr-2">filter_list</span>
+            <AppIcon icon="filter_list" className="mr-2 h-5 w-5" />
             Filter
           </button>
           <button 
             onClick={() => setIsModalOpen(true)}
             className="flex-1 sm:flex-none flex items-center justify-center px-6 py-2 bg-primary text-on-primary rounded-lg text-sm font-medium hover:bg-primary-container hover:text-black transition-all">
-            <span className="material-symbols-outlined text-lg mr-2">add</span>
+            <AppIcon icon="add" className="mr-2 h-5 w-5" />
             Enroll Student
           </button>
         </div>
@@ -227,17 +228,17 @@ const StudentData = () => {
                         <td className="px-8 py-6 text-right flex justify-end gap-2">
                           <button 
                             onClick={() => handlePredictClick(student)}
-                            className="material-symbols-outlined text-neutral-400 hover:text-primary transition-colors"
+                            className="text-neutral-400 hover:text-primary transition-colors"
                             title="Predict metrics for this student"
                           >
-                            insights
+                            <AppIcon icon="insights" className="h-5 w-5" />
                           </button>
                           <button 
                             onClick={() => handleDeleteStudent(student.id, student.name)}
-                            className="material-symbols-outlined text-neutral-400 hover:text-error transition-colors"
+                            className="text-neutral-400 hover:text-error transition-colors"
                             title="Delete this student"
                           >
-                            delete
+                            <AppIcon icon="delete" className="h-5 w-5" />
                           </button>
                         </td>
 
@@ -260,7 +261,7 @@ const StudentData = () => {
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
                   className="p-2 border border-outline-variant border-opacity-15 rounded-lg hover:bg-surface-container-low transition-colors disabled:opacity-50">
-                  <span className="material-symbols-outlined text-sm">chevron_left</span>
+                  <AppIcon icon="chevron_left" className="h-4 w-4" />
                 </button>
                 <button className="p-2 border border-outline-variant border-opacity-15 rounded-lg bg-primary text-on-primary">
                   <span className="text-xs px-2">{page}</span>
@@ -269,7 +270,7 @@ const StudentData = () => {
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages || totalPages === 0}
                   className="p-2 border border-outline-variant border-opacity-15 rounded-lg hover:bg-surface-container-low transition-colors disabled:opacity-50">
-                  <span className="material-symbols-outlined text-sm">chevron_right</span>
+                  <AppIcon icon="chevron_right" className="h-4 w-4" />
                 </button>
               </div>
             </div>
@@ -284,7 +285,7 @@ const StudentData = () => {
             <button 
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 transition-colors text-white/70">
-              <span className="material-symbols-outlined text-lg">close</span>
+              <AppIcon icon="close" className="h-5 w-5" />
             </button>
             <h3 className="text-2xl font-semibold mb-6 tracking-tight text-white">Enroll New Student</h3>
             <form onSubmit={handleEnrollSubmit} className="space-y-4">
