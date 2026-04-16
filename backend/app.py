@@ -43,17 +43,32 @@ def create_app() -> Flask:
     allowed_origins = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
     CORS(app, resources={r"/*": {"origins": allowed_origins}})
 
-    # Database setup
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+    # Database setup - ensure protocol compatibility for SQLAlchemy 1.4+
+    db_url = os.environ.get("DATABASE_URL")
+    if db_url and db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+        logger.info("Updated DATABASE_URL protocol from postgres:// to postgresql://")
+    
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    db.init_app(app)
+    
+    try:
+        db.init_app(app)
+        logger.info("Database initialized successfully.")
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
 
     # Initialize Firebase Admin
     init_firebase()
 
     # Create tables (UserProfile)
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+            logger.info("Database tables created successfully.")
+        except Exception as e:
+            logger.error(f"SQLAlchemy create_all failed: {e}")
+            # We don't crash here, but functionality will be limited
 
     # Load model on startup
     try:
