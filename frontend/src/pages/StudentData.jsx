@@ -91,6 +91,9 @@ const StudentData = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(enrollForm)
       });
+      
+      const result = await response.json();
+      
       if (response.ok) {
         setIsModalOpen(false);
         setEnrollForm({ 
@@ -100,10 +103,14 @@ const StudentData = () => {
         });
         fetchSummary();
         fetchStudents();
+        alert("Student enrolled successfully!");
+      } else {
+        alert(`Enrollment failed: ${result.error || "Unknown error"}`);
       }
 
     } catch (err) {
       console.error("Enrollment failed:", err);
+      alert("Network error: Could not reach the server. Please check your internet connection.");
     }
   };
 

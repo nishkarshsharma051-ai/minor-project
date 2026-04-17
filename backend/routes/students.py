@@ -82,6 +82,7 @@ def delete_student(student_id):
 def enroll_student():
 
     data = request.json
+    print(f"DEBUG: Enrollment request received: {data}")
     first_name = data.get("firstName", "").strip()
     last_name = data.get("lastName", "").strip()
     
@@ -92,11 +93,13 @@ def enroll_student():
         participation = float(data.get("participation", 0.0))
         coding        = float(data.get("coding_score", 0.0))
         communication = float(data.get("communication_score", 0.0))
-    except ValueError:
+    except ValueError as e:
+        print(f"DEBUG: Validation error (ValueError): {str(e)}")
         return jsonify({"error": "Numerical fields must be valid numbers"}), 400
     
     # Validation
     if not first_name or not last_name:
+        print("DEBUG: Validation error: Missing names")
         return jsonify({"error": "First name and Last name are required"}), 400
         
     # Derived properties
