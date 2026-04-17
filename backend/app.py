@@ -39,9 +39,16 @@ def create_app() -> Flask:
         app = Flask(__name__)
         logger.warning(f"Static folder NOT FOUND at {frontend_dir}. Skipping static serving.")
     
-    # Enable CORS - prioritize specific origins for security, or fallback to "*"
-    allowed_origins = os.environ.get("ALLOWED_ORIGINS", "*").split(",")
+    # Set up CORS - prioritize specific origins from env, or fallback to "*"
+    raw_origins = os.environ.get("ALLOWED_ORIGINS", "*")
+    if raw_origins == "*":
+        allowed_origins = "*"
+    else:
+        # Strip spaces and remove empty strings to prevent CORS failures due to bad formatting
+        allowed_origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+    
     CORS(app, resources={r"/*": {"origins": allowed_origins}})
+    logger.info(f"CORS initialized with: {allowed_origins}")
 
     # Database setup - ensure protocol compatibility for SQLAlchemy 1.4+
     db_url = os.environ.get("DATABASE_URL")
